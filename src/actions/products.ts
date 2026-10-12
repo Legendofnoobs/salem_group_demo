@@ -1,6 +1,6 @@
 'use server';
 
-import { prisma } from '@/lib/prisma';
+import { prisma, neonSql } from '@/lib/prisma';
 import { ProductType, ProductCategory, ProductCondition } from '@/types';
 import { trackEvent } from './analytics';
 
@@ -15,54 +15,61 @@ export interface ProductFilters {
 
 export async function getProducts(filters: ProductFilters = {}): Promise<ProductType[]> {
   try {
-    const where: any = {};
+    const [rawProducts, rawVariants] = await Promise.all([
+      neonSql`SELECT * FROM "Product"`,
+      neonSql`SELECT * FROM "ProductVariant" ORDER BY "priceDelta" ASC`,
+    ]);
+
+    let products = rawProducts.map((p: any) => ({
+      ...p,
+      variants: rawVariants.filter((v: any) => v.productId === p.id),
+    }));
 
     if (filters.category && filters.category !== 'all') {
-      where.category = filters.category;
+      products = products.filter(
+        (p: any) => p.category?.toLowerCase() === filters.category?.toLowerCase()
+      );
     }
 
     if (filters.condition && filters.condition !== 'ALL') {
-      where.condition = filters.condition;
+      products = products.filter((p: any) => p.condition === filters.condition);
     }
 
-    const searchQuery = filters.query?.trim();
+    const searchQuery = filters.query?.trim().toLowerCase();
     if (searchQuery) {
-      where.OR = [
-        { title: { contains: searchQuery, mode: 'insensitive' } },
-        { description: { contains: searchQuery, mode: 'insensitive' } },
-        { category: { contains: searchQuery, mode: 'insensitive' } },
-      ];
+      products = products.filter(
+        (p: any) =>
+          p.title?.toLowerCase().includes(searchQuery) ||
+          p.description?.toLowerCase().includes(searchQuery) ||
+          p.category?.toLowerCase().includes(searchQuery)
+      );
     }
 
-    let orderBy: any = [{ isFeatured: 'desc' }, { createdAt: 'desc' }];
     if (filters.sortBy === 'price_asc') {
-      orderBy = { basePrice: 'asc' };
+      products.sort((a: any, b: any) => a.basePrice - b.basePrice);
     } else if (filters.sortBy === 'price_desc') {
-      orderBy = { basePrice: 'desc' };
+      products.sort((a: any, b: any) => b.basePrice - a.basePrice);
     } else if (filters.sortBy === 'newest') {
-      orderBy = { createdAt: 'desc' };
+      products.sort(
+        (a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+    } else {
+      products.sort((a: any, b: any) => {
+        if (a.isFeatured !== b.isFeatured) return a.isFeatured ? -1 : 1;
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      });
     }
-
-    const products = await prisma.product.findMany({
-      where,
-      include: {
-        variants: {
-          orderBy: { priceDelta: 'asc' },
-        },
-      },
-      orderBy,
-    });
 
     // Zero-Result & Search Event Tracking
     if (searchQuery && filters.sessionId) {
       const hasResults = products.length > 0;
       await trackEvent({
         eventType: 'SEARCH',
-        searchQuery,
+        searchQuery: filters.query?.trim(),
         hasResults,
         sessionId: filters.sessionId,
         trafficSource: filters.trafficSource || 'Direct',
-      });
+      }).catch(() => {});
     }
 
     return products as unknown as ProductType[];
@@ -78,16 +85,16 @@ export async function getProductBySlug(
   trafficSource?: string
 ): Promise<ProductType | null> {
   try {
-    const product = await prisma.product.findUnique({
-      where: { slug },
-      include: {
-        variants: {
-          orderBy: { priceDelta: 'asc' },
-        },
-      },
-    });
+    const rows = await neonSql`SELECT * FROM "Product" WHERE slug = ${slug} LIMIT 1`;
+    const product = rows[0];
 
     if (!product) return null;
+
+    const variants = await neonSql`
+      SELECT * FROM "ProductVariant"
+      WHERE "productId" = ${product.id}
+      ORDER BY "priceDelta" ASC
+    `;
 
     // Track product view
     if (sessionId) {
@@ -97,10 +104,13 @@ export async function getProductBySlug(
         productTitle: product.title,
         sessionId,
         trafficSource: trafficSource || 'Direct',
-      });
+      }).catch(() => {});
     }
 
-    return product as unknown as ProductType;
+    return {
+      ...product,
+      variants,
+    } as unknown as ProductType;
   } catch (error) {
     console.error(`Error fetching product by slug ${slug}:`, error);
     return null;

@@ -1,7 +1,8 @@
 import { PrismaClient } from '@prisma/client';
+import { neon } from '@neondatabase/serverless';
 
 const DEFAULT_NEON_URL =
-  'postgresql://neondb_owner:npg_28YzaBKeErCG@ep-late-cloud-b441qxop-pooler.c-6.us-east-2.aws.neon.tech/neondb?sslmode=require&pgbouncer=true&connect_timeout=15';
+  'postgresql://neondb_owner:npg_28YzaBKeErCG@ep-late-cloud-b441qxop-pooler.c-6.us-east-2.aws.neon.tech/neondb?sslmode=require';
 
 const rawUrl =
   process.env.DATABASE_URL ||
@@ -9,10 +10,16 @@ const rawUrl =
   process.env.POSTGRES_URL ||
   DEFAULT_NEON_URL;
 
-// Ensure pooled Neon connections work reliably with Prisma on serverless
-const databaseUrl = rawUrl.includes('-pooler') && !rawUrl.includes('pgbouncer=true')
-  ? `${rawUrl.replace('channel_binding=require&', '').replace('&channel_binding=require', '')}&pgbouncer=true&connect_timeout=15`
-  : rawUrl;
+const cleanNeonUrl = rawUrl
+  .replace('channel_binding=require&', '')
+  .replace('&channel_binding=require', '');
+
+export const neonSql = neon(cleanNeonUrl);
+
+const databaseUrl =
+  cleanNeonUrl.includes('-pooler') && !cleanNeonUrl.includes('pgbouncer=true')
+    ? `${cleanNeonUrl}&pgbouncer=true&connect_timeout=15`
+    : cleanNeonUrl;
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
@@ -30,4 +37,5 @@ export const prisma =
   });
 
 globalForPrisma.prisma = prisma;
+
 

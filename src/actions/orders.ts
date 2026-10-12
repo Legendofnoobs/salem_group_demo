@@ -1,6 +1,7 @@
 'use server';
 
-import { prisma } from '@/lib/prisma';
+import { randomUUID } from 'crypto';
+import { prisma, neonSql } from '@/lib/prisma';
 import { OrderType, OrderStatus } from '@/types';
 import { trackEvent } from './analytics';
 
@@ -27,27 +28,53 @@ export interface CreateOrderPayload {
 
 export async function createCODOrder(payload: CreateOrderPayload) {
   try {
+    const id = randomUUID();
     const randomSuffix = Math.floor(1000 + Math.random() * 9000);
     const orderNumber = `SLM-${randomSuffix}`;
+    const now = new Date().toISOString();
 
-    const order = await prisma.order.create({
-      data: {
-        orderNumber,
-        customerName: payload.customerName.trim(),
-        customerPhone: payload.customerPhone.trim(),
-        customerEmail: payload.customerEmail?.trim() || null,
-        shippingAddress: payload.shippingAddress.trim(),
-        city: payload.city.trim(),
-        paymentMethod: 'CASH_ON_DELIVERY',
-        status: 'PENDING',
-        items: payload.items,
-        subtotal: payload.subtotal,
-        shippingCost: payload.shippingCost || 0,
-        totalAmount: payload.totalAmount,
-        trafficSource: payload.trafficSource || 'Direct',
-        notes: payload.notes || 'Cash On Delivery - Customer requested inspection before payment',
-      },
-    });
+    const rows = await neonSql`
+      INSERT INTO "Order" (
+        "id",
+        "orderNumber",
+        "customerName",
+        "customerPhone",
+        "customerEmail",
+        "shippingAddress",
+        "city",
+        "paymentMethod",
+        "status",
+        "items",
+        "subtotal",
+        "shippingCost",
+        "totalAmount",
+        "trafficSource",
+        "notes",
+        "createdAt",
+        "updatedAt"
+      ) VALUES (
+        ${id},
+        ${orderNumber},
+        ${payload.customerName.trim()},
+        ${payload.customerPhone.trim()},
+        ${payload.customerEmail?.trim() || null},
+        ${payload.shippingAddress.trim()},
+        ${payload.city.trim()},
+        ${'CASH_ON_DELIVERY'},
+        ${'PENDING'},
+        ${JSON.stringify(payload.items)}::jsonb,
+        ${payload.subtotal},
+        ${payload.shippingCost || 0},
+        ${payload.totalAmount},
+        ${payload.trafficSource || 'Direct'},
+        ${payload.notes || 'Cash On Delivery - Customer requested inspection before payment'},
+        ${now}::timestamp,
+        ${now}::timestamp
+      )
+      RETURNING *
+    `;
+
+    const order = rows[0];
 
     // Record checkout completion analytics event
     await trackEvent({
@@ -60,21 +87,26 @@ export async function createCODOrder(payload: CreateOrderPayload) {
         method: 'CASH_ON_DELIVERY',
         itemsCount: payload.items.length,
       },
-    });
+    }).catch(() => {});
 
     // Generate WhatsApp direct text
     const merchantWhatsapp = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || '201002345678';
-    const itemsList = payload.items.map((i) => `• ${i.title} (${i.variant || 'Standard'}) x${i.quantity} = ${i.price.toLocaleString()} EGP`).join('\n');
-    
+    const itemsList = payload.items
+      .map(
+        (i) =>
+          `• ${i.title} (${i.variant || 'Standard'}) x${i.quantity} = ${i.price.toLocaleString()} EGP`
+      )
+      .join('\n');
+
     const waText = encodeURIComponent(
       `*طلب جديد من متجر Salem Group*\n` +
-      `رقم الطلب: #${orderNumber}\n` +
-      `العميل: ${payload.customerName}\n` +
-      `الهاتف: ${payload.customerPhone}\n` +
-      `العنوان: ${payload.shippingAddress}, ${payload.city}\n\n` +
-      `*المنتجات:*\n${itemsList}\n\n` +
-      `*طريقة الدفع:* الدفع عند الاستلام (COD) بعد المعاينة\n` +
-      `*الإجمالي:* ${payload.totalAmount.toLocaleString()} EGP`
+        `رقم الطلب: #${orderNumber}\n` +
+        `العميل: ${payload.customerName}\n` +
+        `الهاتف: ${payload.customerPhone}\n` +
+        `العنوان: ${payload.shippingAddress}, ${payload.city}\n\n` +
+        `*المنتجات:*\n${itemsList}\n\n` +
+        `*طريقة الدفع:* الدفع عند الاستلام (COD) بعد المعاينة\n` +
+        `*الإجمالي:* ${payload.totalAmount.toLocaleString()} EGP`
     );
 
     const whatsappUrl = `https://wa.me/${merchantWhatsapp}?text=${waText}`;
@@ -93,15 +125,10 @@ export async function createCODOrder(payload: CreateOrderPayload) {
 
 export async function getOrders(statusFilter?: OrderStatus | 'ALL'): Promise<OrderType[]> {
   try {
-    const where: any = {};
+    let orders = await neonSql`SELECT * FROM "Order" ORDER BY "createdAt" DESC`;
     if (statusFilter && statusFilter !== 'ALL') {
-      where.status = statusFilter;
+      orders = orders.filter((o: any) => o.status === statusFilter);
     }
-
-    const orders = await prisma.order.findMany({
-      where,
-      orderBy: { createdAt: 'desc' },
-    });
 
     return orders as unknown as OrderType[];
   } catch (error) {
@@ -142,10 +169,10 @@ export async function updateOrderStatus(orderId: string, status: OrderStatus) {
 export async function getOrderByNumber(orderNumber: string): Promise<OrderType | null> {
   try {
     const cleanNumber = orderNumber.trim().toUpperCase();
-    const order = await prisma.order.findUnique({
-      where: { orderNumber: cleanNumber },
-    });
-    return order as unknown as OrderType;
+    const rows = await neonSql`
+      SELECT * FROM "Order" WHERE "orderNumber" = ${cleanNumber} LIMIT 1
+    `;
+    return (rows[0] as unknown as OrderType) || null;
   } catch (error) {
     console.error(`Error retrieving order by number ${orderNumber}:`, error);
     return null;
@@ -154,18 +181,15 @@ export async function getOrderByNumber(orderNumber: string): Promise<OrderType |
 
 export async function getCustomerOrders(phone?: string): Promise<OrderType[]> {
   try {
-    const where: any = {};
+    let orders = await neonSql`SELECT * FROM "Order" ORDER BY "createdAt" DESC LIMIT 20`;
     if (phone && phone.trim()) {
-      where.customerPhone = { contains: phone.trim() };
+      const q = phone.trim();
+      orders = orders.filter((o: any) => o.customerPhone?.includes(q));
     }
-    const orders = await prisma.order.findMany({
-      where,
-      orderBy: { createdAt: 'desc' },
-      take: 20,
-    });
     return orders as unknown as OrderType[];
   } catch (error) {
     console.error('Error retrieving customer orders:', error);
     return [];
   }
 }
+
