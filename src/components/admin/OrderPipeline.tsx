@@ -59,7 +59,7 @@ export function OrderPipeline({ initialOrders, onOrderUpdated }: OrderPipelinePr
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-[34px] font-semibold text-[#1d1d1f] tracking-[-0.374px] font-display">
-            Cash On Delivery Orders
+            Orders
           </h2>
           <p className="text-[17px] text-[#7a7a7a] mt-0.5">
             Manage dispatch status and message customers via WhatsApp.
