@@ -25,7 +25,7 @@ export function AdminHeader({
   const tabs: Array<{ id: AdminTab; label: string; badge?: number }> = [
     { id: 'overview', label: 'Overview' },
     { id: 'analytics', label: 'Product Analytics' },
-    { id: 'orders', label: 'COD Orders', badge: pendingOrdersCount },
+    { id: 'orders', label: 'Orders', badge: pendingOrdersCount },
     { id: 'inventory', label: 'Inventory' },
     { id: 'tradeins', label: 'Trade-In Leads', badge: newLeadsCount },
     { id: 'settings', label: 'Settings' },

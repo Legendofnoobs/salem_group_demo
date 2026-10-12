@@ -226,7 +226,7 @@ export function ProductModal({
                   }}
                   className="flex-1 py-3 px-6 rounded-[9999px] bg-[#0066cc] text-[#ffffff] font-normal text-[17px] hover:bg-[#0071e3] apple-btn-active transition-all"
                 >
-                  Order with COD
+                  Order Now
                 </button>
               </div>
 

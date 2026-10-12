@@ -1,168 +1,14 @@
 import { PrismaClient } from '@prisma/client';
+import fs from 'fs';
+import path from 'path';
 
 const prisma = new PrismaClient();
 
-function createSvgBase64(svg: string): string {
-  return `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
-}
-
-// Authentic Transparent Apple Product Renders (No fake background gradients)
-function macbookSvg(title: string, color: string, chipLabel: string): string {
-  return createSvgBase64(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
-      <defs>
-        <linearGradient id="metalDeck" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${color}"/>
-          <stop offset="100%" stop-color="#141416"/>
-        </linearGradient>
-        <linearGradient id="screenDisplay" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#0a0a0c"/>
-          <stop offset="100%" stop-color="#18181c"/>
-        </linearGradient>
-      </defs>
-
-      <!-- Soft ground contact shadow -->
-      <ellipse cx="400" cy="410" rx="280" ry="16" fill="rgba(0,0,0,0.22)"/>
-
-      <!-- Screen Outer Lid -->
-      <rect x="190" y="70" width="420" height="270" rx="12" fill="#0d0d0f" stroke="#333336" stroke-width="2"/>
-      
-      <!-- Display Bezel & Glass -->
-      <rect x="202" y="82" width="396" height="246" rx="6" fill="url(#screenDisplay)"/>
-      
-      <!-- Camera Notch -->
-      <path d="M 372 82 L 428 82 L 424 94 C 422 97 419 99 415 99 L 385 99 C 381 99 378 97 376 94 Z" fill="#0d0d0f"/>
-      <circle cx="400" cy="89" r="2.5" fill="#1f2937"/>
-
-      <!-- Screen Wallpaper & Chip Info -->
-      <rect x="208" y="104" width="384" height="218" rx="4" fill="#111114"/>
-      <!-- Apple Logo Watermark -->
-      <path d="M 395 190 C 395 178 402 173 403 172 C 398 165 390 164 388 164 C 380 163 373 168 369 168 C 365 168 359 163 353 163 C 344 163 336 169 331 178 C 321 195 329 220 338 234 C 343 241 349 248 356 248 C 363 248 366 243 374 243 C 382 243 385 248 392 248 C 399 248 404 241 409 234 C 414 226 416 222 417 220 C 416 219 406 215 406 203 C 406 193 414 188 415 187 C 409 180 401 179 399 179 C 398 179 395 184 395 190 Z" fill="rgba(255,255,255,0.15)"/>
-      <text x="400" y="240" font-family="-apple-system, 'SF Pro Display', sans-serif" font-size="24" font-weight="600" fill="#ffffff" text-anchor="middle">${chipLabel}</text>
-      <text x="400" y="265" font-family="-apple-system, 'SF Pro Text', sans-serif" font-size="13" font-weight="400" fill="#a1a1aa" text-anchor="middle">Liquid Retina XDR • ProMotion 120Hz</text>
-
-      <!-- Bottom Chassis Deck -->
-      <path d="M 140 340 L 660 340 L 642 388 L 158 388 Z" fill="url(#metalDeck)" stroke="#3f3f46" stroke-width="1.5"/>
-      <!-- Notch opening thumb indent -->
-      <rect x="364" y="340" width="72" height="5" rx="2.5" fill="#08080a"/>
-      <!-- Lower base chamfer -->
-      <rect x="140" y="384" width="520" height="12" rx="6" fill="#18181b"/>
-      <!-- Black rubber feet -->
-      <rect x="170" y="396" width="36" height="4" rx="2" fill="#0a0a0c"/>
-      <rect x="594" y="396" width="36" height="4" rx="2" fill="#0a0a0c"/>
-    </svg>
-  `);
-}
-
-function iphoneSvg(title: string, colorHex: string, sub: string): string {
-  return createSvgBase64(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 500" width="600" height="500">
-      <defs>
-        <linearGradient id="tiFrame" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="${colorHex}"/>
-          <stop offset="100%" stop-color="#242426"/>
-        </linearGradient>
-      </defs>
-
-      <!-- Contact Shadow -->
-      <ellipse cx="300" cy="425" rx="140" ry="14" fill="rgba(0,0,0,0.22)"/>
-
-      <!-- Phone Outer Titanium Chassis -->
-      <rect x="200" y="60" width="200" height="355" rx="38" fill="url(#tiFrame)" stroke="${colorHex}" stroke-width="2.5"/>
-      
-      <!-- Black Bezel -->
-      <rect x="206" y="66" width="188" height="343" rx="32" fill="#000000"/>
-
-      <!-- OLED Display Surface -->
-      <rect x="210" y="70" width="180" height="335" rx="28" fill="#0c0d10"/>
-
-      <!-- Dynamic Island -->
-      <rect x="268" y="80" width="64" height="18" rx="9" fill="#000000"/>
-      <circle cx="280" cy="89" r="3.5" fill="#111827"/>
-      <circle cx="316" cy="89" r="3" fill="#1e293b"/>
-
-      <!-- Display Content -->
-      <text x="300" y="210" font-family="-apple-system, 'SF Pro Display', sans-serif" font-size="36" font-weight="600" fill="#ffffff" text-anchor="middle" letter-spacing="-0.5px">09:41</text>
-      <text x="300" y="240" font-family="-apple-system, 'SF Pro Text', sans-serif" font-size="13" font-weight="400" fill="#a1a1aa" text-anchor="middle">Super Retina XDR</text>
-      
-      <!-- A18 Pro Badge -->
-      <rect x="240" y="280" width="120" height="30" rx="15" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-      <text x="300" y="300" font-family="-apple-system, 'SF Pro Text', sans-serif" font-size="12" font-weight="600" fill="${colorHex}" text-anchor="middle">A18 Pro</text>
-
-      <!-- Home Bar Indicator -->
-      <rect x="265" y="392" width="70" height="4" rx="2" fill="#ffffff" opacity="0.8"/>
-    </svg>
-  `);
-}
-
-function ipadSvg(title: string, color: string): string {
-  return createSvgBase64(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 500" width="600" height="500">
-      <!-- Ground Shadow -->
-      <ellipse cx="300" cy="425" rx="170" ry="14" fill="rgba(0,0,0,0.22)"/>
-
-      <!-- iPad Body -->
-      <rect x="160" y="75" width="280" height="340" rx="22" fill="#1c1d21" stroke="#38383c" stroke-width="2"/>
-      
-      <!-- Screen Display -->
-      <rect x="170" y="85" width="260" height="320" rx="14" fill="#0a0a0c"/>
-
-      <!-- Display Visual -->
-      <text x="300" y="235" font-family="-apple-system, 'SF Pro Display', sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">Ultra Retina XDR</text>
-      <text x="300" y="265" font-family="-apple-system, 'SF Pro Text', sans-serif" font-size="14" font-weight="400" fill="#38bdf8" text-anchor="middle">M4 Chip • Tandem OLED</text>
-      <text x="300" y="295" font-family="-apple-system, 'SF Pro Text', sans-serif" font-size="12" font-weight="400" fill="#71717a" text-anchor="middle">Thinnest Apple Product • 5.1 mm</text>
-    </svg>
-  `);
-}
-
-function watchSvg(title: string, color: string): string {
-  return createSvgBase64(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
-      <!-- Contact Shadow -->
-      <ellipse cx="250" cy="430" rx="100" ry="12" fill="rgba(0,0,0,0.22)"/>
-
-      <!-- Band Top & Bottom -->
-      <path d="M 200 40 L 300 40 L 290 140 L 210 140 Z" fill="#f97316"/>
-      <path d="M 210 350 L 290 350 L 300 440 L 200 440 Z" fill="#f97316"/>
-
-      <!-- Titanium Case -->
-      <rect x="165" y="130" width="170" height="230" rx="42" fill="#2d2d30" stroke="#71717a" stroke-width="3"/>
-      <!-- Screen -->
-      <rect x="178" y="144" width="144" height="202" rx="32" fill="#000000"/>
-      <!-- Digital Crown -->
-      <rect x="335" y="165" width="12" height="42" rx="4" fill="#a1a1aa"/>
-      <!-- Orange Action Button -->
-      <rect x="153" y="185" width="12" height="38" rx="4" fill="#f97316"/>
-
-      <!-- Dial UI -->
-      <text x="250" y="235" font-family="-apple-system, 'SF Pro Display', sans-serif" font-size="44" font-weight="600" fill="#f97316" text-anchor="middle">09:41</text>
-      <text x="250" y="270" font-family="-apple-system, 'SF Pro Text', sans-serif" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">3,000 NITS</text>
-      <text x="250" y="295" font-family="-apple-system, 'SF Pro Text', sans-serif" font-size="11" font-weight="400" fill="#a1a1aa" text-anchor="middle">49mm Titanium</text>
-    </svg>
-  `);
-}
-
-function airpodsSvg(title: string): string {
-  return createSvgBase64(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
-      <!-- Shadow -->
-      <ellipse cx="250" cy="380" rx="100" ry="12" fill="rgba(0,0,0,0.18)"/>
-
-      <!-- MagSafe Case Body -->
-      <rect x="170" y="160" width="160" height="200" rx="55" fill="#ffffff" stroke="#e5e5ea" stroke-width="1.5"/>
-      <!-- Lid Seam -->
-      <line x1="170" y1="225" x2="330" y2="225" stroke="#d1d1d6" stroke-width="1"/>
-      <!-- Status LED -->
-      <circle cx="250" cy="260" r="3" fill="#34c759"/>
-      
-      <text x="250" y="315" font-family="-apple-system, 'SF Pro Text', sans-serif" font-size="12" font-weight="600" fill="#1d1d1f" text-anchor="middle">H2 Chip</text>
-      <text x="250" y="335" font-family="-apple-system, 'SF Pro Text', sans-serif" font-size="10" font-weight="400" fill="#86868b" text-anchor="middle">Active Noise Cancellation</text>
-    </svg>
-  `);
-}
+const realImagesPath = path.join(__dirname, 'real_images.json');
+const realImages = JSON.parse(fs.readFileSync(realImagesPath, 'utf8'));
 
 async function main() {
-  console.log('Seeding PostgreSQL 18 with Apple Design System compliant assets...');
+  console.log('Seeding PostgreSQL 18 with authentic Apple product photos...');
 
   // Clean existing tables in order
   await prisma.analyticsEvent.deleteMany({});
@@ -191,7 +37,7 @@ async function main() {
     },
   });
 
-  // 2. Seed Products
+  // 2. Seed Products with Authentic Real Apple Photos
   const productsData = [
     {
       title: 'MacBook Pro 16" M3 Max',
@@ -212,7 +58,8 @@ async function main() {
       },
       warrantyInfo: 'Official Apple 1-Year International Warranty + Salem On-Site Service',
       images: [
-        macbookSvg('MacBook Pro 16" M3 Max', '#1f1f23', 'M3 Max'),
+        realImages.mbp16_spaceblack,
+        realImages.mbp16_silver,
       ],
       isFeatured: true,
       stock: 4,
@@ -240,7 +87,8 @@ async function main() {
       },
       warrantyInfo: '1-Year Official Apple Warranty with Salem Tech Support',
       images: [
-        macbookSvg('MacBook Air 13" M3', '#1e2433', 'M3 Air'),
+        realImages.mba13_midnight,
+        realImages.mba13_starlight,
       ],
       isFeatured: true,
       stock: 8,
@@ -268,7 +116,7 @@ async function main() {
       },
       warrantyInfo: '6-Month Salem Full Hardware Replacement Warranty',
       images: [
-        macbookSvg('MacBook Pro 14" M2 Pro', '#71717a', 'M2 Pro Pre-Owned'),
+        realImages.mbp14_preowned_spacegray,
       ],
       isFeatured: false,
       stock: 2,
@@ -294,7 +142,8 @@ async function main() {
       },
       warrantyInfo: 'Brand New Sealed • 1-Year Apple International Warranty',
       images: [
-        iphoneSvg('iPhone 16 Pro', '#c7b198', 'Desert Titanium'),
+        realImages.iphone16pro_desert,
+        realImages.iphone16pro_natural,
       ],
       isFeatured: true,
       stock: 6,
@@ -320,7 +169,8 @@ async function main() {
       },
       warrantyInfo: 'Sealed Box • 1-Year Official Warranty with Salem Support',
       images: [
-        iphoneSvg('iPhone 16 Pro Max', '#9a948c', 'Natural Titanium'),
+        realImages.iphone16pro_natural,
+        realImages.iphone16_black,
       ],
       isFeatured: true,
       stock: 5,
@@ -346,7 +196,7 @@ async function main() {
       },
       warrantyInfo: '10-Month Remaining Apple Warranty + Salem 6-Month Guarantee',
       images: [
-        iphoneSvg('iPhone 15 Pro', '#3f3f46', 'Black Titanium'),
+        realImages.iphone15pro_blacktitanium,
       ],
       isFeatured: false,
       stock: 3,
@@ -371,7 +221,7 @@ async function main() {
       },
       warrantyInfo: '1-Year Official Apple Warranty',
       images: [
-        ipadSvg('iPad Pro 13" M4', '#18181b'),
+        realImages.ipadpro13_spaceblack,
       ],
       isFeatured: true,
       stock: 3,
@@ -396,7 +246,7 @@ async function main() {
       },
       warrantyInfo: '1-Year International Warranty',
       images: [
-        watchSvg('Apple Watch Ultra 2', '#27272a'),
+        realImages.watchultra2,
       ],
       isFeatured: true,
       stock: 4,
@@ -421,7 +271,7 @@ async function main() {
       },
       warrantyInfo: '1-Year Apple Warranty',
       images: [
-        airpodsSvg('AirPods Pro 2'),
+        realImages.airpodspro2,
       ],
       isFeatured: true,
       stock: 12,
@@ -551,7 +401,7 @@ async function main() {
     });
   }
 
-  console.log('Database seeded with DESIGN.md compliant Apple catalog!');
+  console.log('Database successfully seeded with authentic Apple real product photos!');
 }
 
 main()

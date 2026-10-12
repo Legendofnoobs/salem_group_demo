@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { AdminHeader, AdminTab } from './AdminHeader';
+import { AdminTab } from './AdminHeader';
+import { AdminSidebar } from './AdminSidebar';
+import { AdminTopbar } from './AdminTopbar';
 import { OverviewKPIs } from './OverviewKPIs';
 import { ProductAnalyticsDashboard } from './ProductAnalyticsDashboard';
 import { OrderPipeline } from './OrderPipeline';
@@ -40,6 +42,7 @@ export function AdminPortalView({
   onRefreshData,
 }: AdminPortalViewProps) {
   const [activeTab, setActiveTab] = useState<AdminTab>('overview');
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [kpis, setKpis] = useState(initialKPIs);
   const [settings, setSettings] = useState(initialSettings);
 
@@ -47,45 +50,58 @@ export function AdminPortalView({
   const newLeadsCount = initialLeads.filter((l) => l.status === 'NEW_LEAD').length;
 
   return (
-    <div className="min-h-screen bg-[#f5f5f7] text-[#1d1d1f] flex flex-col font-sans">
-      <AdminHeader
+    <div className="min-h-screen bg-[#f5f5f7] text-[#1d1d1f] flex font-sans">
+      {/* Sidebar Navigation (Desktop Fixed + Mobile Drawer) */}
+      <AdminSidebar
         activeTab={activeTab}
         onSelectTab={setActiveTab}
         onBackToStore={onBackToStore}
         storeName={settings.storeName}
         pendingOrdersCount={pendingOrdersCount}
         newLeadsCount={newLeadsCount}
+        isOpenMobile={isMobileSidebarOpen}
+        onCloseMobile={() => setIsMobileSidebarOpen(false)}
       />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
-        {activeTab === 'overview' && (
-          <OverviewKPIs kpis={kpis} onNavigateTab={setActiveTab} />
-        )}
+      {/* Main Content Pane with Topbar */}
+      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+        <AdminTopbar
+          activeTab={activeTab}
+          onOpenMobileSidebar={() => setIsMobileSidebarOpen(true)}
+          onBackToStore={onBackToStore}
+          storeName={settings.storeName}
+        />
 
-        {activeTab === 'analytics' && (
-          <ProductAnalyticsDashboard initialAnalytics={initialAnalytics} />
-        )}
+        <main className="max-w-7xl mx-auto px-4 sm:px-8 py-8 flex-1 w-full">
+          {activeTab === 'overview' && (
+            <OverviewKPIs kpis={kpis} onNavigateTab={setActiveTab} />
+          )}
 
-        {activeTab === 'orders' && (
-          <OrderPipeline initialOrders={initialOrders} onOrderUpdated={onRefreshData} />
-        )}
+          {activeTab === 'analytics' && (
+            <ProductAnalyticsDashboard initialAnalytics={initialAnalytics} />
+          )}
 
-        {activeTab === 'inventory' && (
-          <InventoryManager initialProducts={initialProducts} onProductsUpdated={onRefreshData} />
-        )}
+          {activeTab === 'orders' && (
+            <OrderPipeline initialOrders={initialOrders} onOrderUpdated={onRefreshData} />
+          )}
 
-        {activeTab === 'tradeins' && (
-          <TradeInLeadsManager initialLeads={initialLeads} />
-        )}
+          {activeTab === 'inventory' && (
+            <InventoryManager initialProducts={initialProducts} onProductsUpdated={onRefreshData} />
+          )}
 
-        {activeTab === 'settings' && (
-          <StoreSettingsView initialSettings={settings} onSettingsUpdated={setSettings} />
-        )}
-      </main>
+          {activeTab === 'tradeins' && (
+            <TradeInLeadsManager initialLeads={initialLeads} />
+          )}
 
-      <footer className="border-t border-[#e0e0e0] bg-[#ffffff] py-6 px-4 text-center text-[12px] text-[#86868b]">
-        <span> Salem Group Merchant Portal • Connected to Local PostgreSQL 18</span>
-      </footer>
+          {activeTab === 'settings' && (
+            <StoreSettingsView initialSettings={settings} onSettingsUpdated={setSettings} />
+          )}
+        </main>
+
+        <footer className="border-t border-[#e0e0e0] bg-[#ffffff] py-5 px-6 text-center text-[12px] text-[#86868b]">
+          <span> Salem Group Merchant Portal • Connected to Local PostgreSQL 18</span>
+        </footer>
+      </div>
     </div>
   );
 }

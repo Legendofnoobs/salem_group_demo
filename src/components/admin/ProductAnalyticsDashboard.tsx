@@ -199,7 +199,7 @@ export function ProductAnalyticsDashboard({ initialAnalytics }: ProductAnalytics
               <tr className="border-b border-[#e0e0e0] text-[#7a7a7a] text-[12px]">
                 <th className="py-2.5 px-2 font-semibold">Channel</th>
                 <th className="py-2.5 px-2 font-semibold">Visits</th>
-                <th className="py-2.5 px-2 font-semibold">COD Orders</th>
+                <th className="py-2.5 px-2 font-semibold">Orders</th>
                 <th className="py-2.5 px-2 font-semibold">Revenue (EGP)</th>
                 <th className="py-2.5 px-2 font-semibold text-right">Conv. %</th>
               </tr>
