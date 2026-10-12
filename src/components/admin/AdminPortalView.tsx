@@ -99,7 +99,7 @@ export function AdminPortalView({
         </main>
 
         <footer className="border-t border-[#e0e0e0] bg-[#ffffff] py-5 px-6 text-center text-[12px] text-[#86868b]">
-          <span> Salem Group Merchant Portal • Connected to Local PostgreSQL 18</span>
+          <span>Salem Group Operations Center • Connected to PostgreSQL 18 Local Engine</span>
         </footer>
       </div>
     </div>

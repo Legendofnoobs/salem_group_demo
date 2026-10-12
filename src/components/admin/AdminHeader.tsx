@@ -37,7 +37,7 @@ export function AdminHeader({
       <div className="max-w-[1200px] mx-auto px-4 sm:px-8 h-[52px] flex items-center justify-between">
         <div className="flex items-center gap-3">
           <span className="text-[17px] font-semibold text-[#1d1d1f]">
-             {storeName} Merchant Portal
+            {storeName} Merchant Portal
           </span>
           <span className="text-[12px] text-[#7a7a7a] font-normal hidden sm:inline border-l border-[#e0e0e0] pl-3">
             Local PostgreSQL 18

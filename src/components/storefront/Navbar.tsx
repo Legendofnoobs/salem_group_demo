@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { ShoppingBag, Search, X, ShieldCheck } from 'lucide-react';
+import React from 'react';
+import { ShoppingBag, Search, X, ShieldCheck, Truck, RefreshCw, PhoneCall } from 'lucide-react';
 import { ProductCategory } from '@/types';
 
 interface NavbarProps {
@@ -31,156 +31,159 @@ export function Navbar({
   currency,
   onToggleCurrency,
 }: NavbarProps) {
-  const [showSearch, setShowSearch] = useState(false);
-
   const categories: Array<{ id: ProductCategory; label: string }> = [
-    { id: 'all', label: 'Store' },
-    { id: 'mac', label: 'Mac' },
+    { id: 'all', label: 'All Products' },
+    { id: 'mac', label: 'Mac & MacBooks' },
     { id: 'iphone', label: 'iPhone' },
     { id: 'ipad', label: 'iPad' },
-    { id: 'watch', label: 'Watch' },
-    { id: 'airpods', label: 'AirPods' },
+    { id: 'watch', label: 'Apple Watch' },
+    { id: 'airpods', label: 'AirPods & Audio' },
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full">
-      {/* 1. Global Nav (44px true black #000000, 12px typography, quiet Apple style) */}
-      <div className="bg-[#000000] text-[#ffffff] h-[44px] flex items-center px-4 sm:px-8 border-b border-[#333333]/40">
-        <div className="max-w-[1024px] mx-auto w-full flex items-center justify-between text-[12px] font-normal tracking-[-0.12px]">
-          {/* Apple Logo & Store Name */}
-          <button
-            onClick={() => onSelectCategory('all')}
-            className="flex items-center gap-2 hover:opacity-75 transition-opacity"
-          >
-            <span className="text-[15px] font-semibold leading-none"></span>
-            <span className="font-semibold tracking-normal text-[13px]">Salem Group</span>
-          </button>
+    <header className="sticky top-0 z-40 w-full shadow-sm">
+      {/* 1. Top eCommerce Utility Bar */}
+      <div className="bg-[#f5f5f7] border-b border-[#e0e0e0] text-[12px] text-[#7a7a7a] py-1.5 px-4 sm:px-8">
+        <div className="max-w-[1240px] mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="flex items-center gap-1.5 text-[#1d1d1f] font-medium">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#0066cc]" />
+              Cash On Delivery
+            </span>
+            <span className="hidden sm:inline text-[#d2d2d7]">•</span>
+            <span className="hidden sm:inline">Inspect & Unbox Device Before Paying</span>
+            <span className="hidden md:inline text-[#d2d2d7]">•</span>
+            <span className="hidden md:inline">Express 24h Delivery Across Egypt</span>
+          </div>
 
-          {/* Desktop Categories */}
-          <nav className="hidden md:flex items-center gap-7">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => onSelectCategory(cat.id)}
-                className={`transition-opacity hover:opacity-100 ${
-                  activeCategory === cat.id ? 'text-[#ffffff] font-semibold' : 'text-[#cccccc] opacity-80'
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
-            <button
-              onClick={onOpenTradeIn}
-              className="text-[#cccccc] opacity-80 hover:opacity-100 hover:text-[#2997ff] transition-all"
-            >
-              Trade In
-            </button>
+          <div className="flex items-center gap-4 text-[12px]">
             <button
               onClick={onOpenTracking}
-              className="text-[#cccccc] opacity-80 hover:opacity-100 transition-opacity"
+              className="hidden sm:flex items-center gap-1 hover:text-[#0066cc] transition-colors"
             >
-              Support
+              <Truck className="w-3.5 h-3.5" />
+              <span>Track Order</span>
             </button>
-          </nav>
 
-          {/* Right Action Icons */}
-          <div className="flex items-center gap-4 text-[#cccccc]">
-            {/* Search Trigger */}
             <button
-              onClick={() => setShowSearch(!showSearch)}
-              className="hover:text-white transition-colors p-1"
-              title="Search"
+              onClick={onOpenTradeIn}
+              className="hidden md:flex items-center gap-1 hover:text-[#0066cc] transition-colors"
             >
-              <Search className="w-3.5 h-3.5" />
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span>Trade-In Estimator</span>
             </button>
 
-            {/* Currency */}
             <button
               onClick={onToggleCurrency}
-              className="text-[11px] font-medium text-[#cccccc] hover:text-white transition-colors"
+              className="px-2 py-0.5 rounded bg-white border border-[#e0e0e0] font-medium text-[#1d1d1f] hover:border-[#0066cc] transition-colors"
+              title="Toggle Currency"
             >
               {currency}
             </button>
 
-            {/* Shopping Bag */}
-            <button
-              onClick={onOpenCart}
-              className="relative hover:text-white transition-colors p-1"
-              title="Shopping Bag"
-            >
-              <ShoppingBag className="w-3.5 h-3.5" />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#0066cc] text-white text-[9px] font-bold w-3.5 h-3.5 rounded-full flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </button>
-
-            {/* Admin Switcher */}
             <button
               onClick={onToggleAdmin}
-              className="text-[11px] font-medium px-2.5 py-0.5 rounded-[9999px] bg-[#1d1d1f] hover:bg-[#333333] text-white transition-colors border border-[#333333]"
+              className="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#1d1d1f] hover:bg-[#333333] text-white transition-colors"
             >
-              Admin
+              Merchant Admin
             </button>
           </div>
         </div>
       </div>
 
-      {/* 2. Sub-Nav Frosted (52px, #f5f5f7 parchment with backdrop blur, 1px border) */}
-      <div className="apple-frosted h-[52px] flex items-center px-4 sm:px-8">
-        <div className="max-w-[1024px] mx-auto w-full flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="text-[19px] sm:text-[21px] font-semibold text-[#1d1d1f] tracking-[0.231px]">
-              Apple Authorized Reseller
-            </span>
-            <span className="hidden sm:inline-block text-[12px] text-[#7a7a7a] font-normal border-l border-[#e0e0e0] pl-3">
-              Cairo, Egypt
-            </span>
-          </div>
+      {/* 2. Main Brand & Search Navigation */}
+      <div className="bg-[#ffffff] border-b border-[#e0e0e0] px-4 sm:px-8 py-3.5">
+        <div className="max-w-[1240px] mx-auto flex items-center justify-between gap-4 sm:gap-8">
+          {/* Salem Group Brand Monogram & Name */}
+          <button
+            onClick={() => onSelectCategory('all')}
+            className="flex items-center gap-3 text-left shrink-0 hover:opacity-85 transition-opacity"
+          >
+            <div className="w-9 h-9 rounded-xl bg-[#1d1d1f] text-white flex items-center justify-center font-bold text-[16px] tracking-tight shadow-sm">
+              SG
+            </div>
+            <div>
+              <span className="text-[18px] sm:text-[20px] font-bold text-[#1d1d1f] tracking-tight leading-none block">
+                SALEM GROUP
+              </span>
+              <span className="text-[10px] text-[#7a7a7a] font-semibold tracking-wider uppercase block mt-0.5">
+                Premium Electronics & Apple Specialists
+              </span>
+            </div>
+          </button>
 
-          <div className="flex items-center gap-3">
-            {/* Cash on Delivery Notice */}
-            <span className="hidden lg:flex items-center gap-1.5 text-[12px] text-[#1d1d1f] font-normal">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#0066cc]" />
-              Cash On Delivery with Inspection
-            </span>
-
-            {/* Quick Buy CTA Button */}
-            <button
-              onClick={() => onSelectCategory('all')}
-              className="px-4 py-1.5 rounded-[9999px] bg-[#0066cc] text-white text-[12px] font-normal hover:bg-[#0071e3] apple-btn-active transition-all"
-            >
-              Shop Now
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Expandable Search Input (Pill Shaped per DESIGN.md search-input) */}
-      {showSearch && (
-        <div className="bg-[#f5f5f7] border-b border-[#e0e0e0] py-3 px-4 transition-all">
-          <div className="max-w-[640px] mx-auto relative flex items-center">
-            <Search className="w-4 h-4 text-[#7a7a7a] absolute left-4 pointer-events-none" />
+          {/* Central Search Bar */}
+          <div className="flex-1 max-w-[560px] relative">
+            <Search className="w-4 h-4 text-[#7a7a7a] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
-              autoFocus
-              placeholder="Search Mac, iPhone, iPad, Apple Watch..."
+              placeholder="Search MacBook Pro, iPhone 16, iPad, AirPods, Apple Watch..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full h-[44px] pl-11 pr-10 rounded-[9999px] bg-[#ffffff] border border-[#e0e0e0] text-[17px] text-[#1d1d1f] placeholder-[#7a7a7a] focus:outline-none focus:border-[#0071e3] transition-colors"
+              className="w-full h-[40px] pl-10 pr-9 rounded-full bg-[#f5f5f7] border border-transparent focus:border-[#0066cc] focus:bg-white text-[14px] text-[#1d1d1f] placeholder-[#7a7a7a] outline-none transition-all"
             />
             {searchQuery && (
               <button
                 onClick={() => onSearchChange('')}
-                className="absolute right-3.5 text-[#7a7a7a] hover:text-[#1d1d1f]"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#7a7a7a] hover:text-[#1d1d1f]"
               >
-                <X className="w-4 h-4" />
+                <X className="w-3.5 h-3.5" />
               </button>
             )}
           </div>
+
+          {/* Right Header CTAs: Trade-In & Shopping Bag */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            <button
+              onClick={onOpenTradeIn}
+              className="hidden lg:flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-[#e0e0e0] hover:border-[#0066cc] text-[#1d1d1f] text-[13px] font-medium transition-colors"
+            >
+              <RefreshCw className="w-3.5 h-3.5 text-[#0066cc]" />
+              <span>Sell & Trade-In</span>
+            </button>
+
+            <button
+              onClick={onOpenCart}
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#0066cc] hover:bg-[#0071e3] text-white text-[13px] font-medium apple-btn-active transition-all shadow-sm"
+              aria-label="Shopping Bag"
+            >
+              <div className="relative">
+                <ShoppingBag className="w-4 h-4" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1.5 -right-2 bg-white text-[#0066cc] text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
+                    {cartCount}
+                  </span>
+                )}
+              </div>
+              <span className="hidden sm:inline font-semibold">
+                {cartCount > 0 ? `Bag (${cartCount})` : 'Bag'}
+              </span>
+            </button>
+          </div>
         </div>
-      )}
+      </div>
+
+      {/* 3. Category Departments Bar */}
+      <div className="bg-[#ffffff] border-b border-[#e0e0e0] px-4 sm:px-8">
+        <div className="max-w-[1240px] mx-auto flex items-center gap-2 sm:gap-4 overflow-x-auto scrollbar-none py-2">
+          {categories.map((cat) => {
+            const isSelected = activeCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => onSelectCategory(cat.id)}
+                className={`px-3.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition-all ${
+                  isSelected
+                    ? 'bg-[#1d1d1f] text-white font-medium shadow-xs'
+                    : 'text-[#7a7a7a] hover:text-[#1d1d1f] hover:bg-[#f5f5f7]'
+                }`}
+              >
+                {cat.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
     </header>
   );
 }

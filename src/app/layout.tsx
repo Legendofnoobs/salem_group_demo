@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Salem Group | Apple Reseller & Certified Pre-Owned',
-  description: 'Authorized Apple Experience in Egypt. MacBook Pro M3, iPhone 16 Pro, Certified Pre-Owned, Cash on Delivery with device inspection before paying.',
+  title: 'Salem Group | Premium Electronics & Certified Pre-Owned',
+  description: 'Egypt’s premier destination for authentic sealed Apple hardware and certified pre-owned devices. Cash on Delivery with device inspection before paying.',
 };
 
 export default function RootLayout({
