@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { Laptop, Smartphone, Tablet, Watch, Headphones, Sparkles, Filter } from 'lucide-react';
 import { ProductCategory, ProductCondition } from '@/types';
 
 interface CategoryPillsProps {
@@ -23,75 +22,80 @@ export function CategoryPills({
   onSelectSort,
   totalCount,
 }: CategoryPillsProps) {
-  const categoryItems: Array<{ id: ProductCategory; label: string; icon: React.ReactNode }> = [
-    { id: 'all', label: 'All Products', icon: <Sparkles className="w-3.5 h-3.5" /> },
-    { id: 'mac', label: 'MacBook', icon: <Laptop className="w-3.5 h-3.5" /> },
-    { id: 'iphone', label: 'iPhone', icon: <Smartphone className="w-3.5 h-3.5" /> },
-    { id: 'ipad', label: 'iPad', icon: <Tablet className="w-3.5 h-3.5" /> },
-    { id: 'watch', label: 'Apple Watch', icon: <Watch className="w-3.5 h-3.5" /> },
-    { id: 'airpods', label: 'AirPods', icon: <Headphones className="w-3.5 h-3.5" /> },
+  const categories: Array<{ id: ProductCategory; label: string }> = [
+    { id: 'all', label: 'All Products' },
+    { id: 'mac', label: 'Mac' },
+    { id: 'iphone', label: 'iPhone' },
+    { id: 'ipad', label: 'iPad' },
+    { id: 'watch', label: 'Apple Watch' },
+    { id: 'airpods', label: 'AirPods' },
   ];
 
-  const conditionItems: Array<{ id: ProductCondition | 'ALL'; label: string }> = [
-    { id: 'ALL', label: 'All Conditions' },
+  const conditions: Array<{ id: ProductCondition | 'ALL'; label: string }> = [
+    { id: 'ALL', label: 'All Models' },
     { id: 'NEW_SEALED', label: 'Brand New Sealed' },
     { id: 'OPEN_BOX', label: 'Open Box (100% Battery)' },
-    { id: 'CERTIFIED_PRE_OWNED', label: 'Certified Pre-Owned' },
+    { id: 'CERTIFIED_PRE_OWNED', label: 'Salem Certified Pre-Owned' },
   ];
 
   return (
-    <div className="space-y-4 mb-8">
-      {/* Category Tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-        {categoryItems.map((cat) => (
-          <button
-            key={cat.id}
-            onClick={() => onSelectCategory(cat.id)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
-              selectedCategory === cat.id
-                ? 'bg-white text-black shadow-md scale-[1.02]'
-                : 'bg-zinc-900/80 text-zinc-400 hover:text-white border border-white/10 hover:border-zinc-600'
-            }`}
-          >
-            {cat.icon}
-            <span>{cat.label}</span>
-          </button>
-        ))}
-      </div>
-
-      {/* Sub-Filters: Condition & Sort */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-white/5">
-        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none">
-          <span className="text-[11px] text-zinc-500 font-medium mr-1 flex items-center gap-1">
-            <Filter className="w-3 h-3" /> Filter:
-          </span>
-          {conditionItems.map((cond) => (
+    <div className="mb-10 space-y-6">
+      {/* Category Navigation Bar (Quiet text row) */}
+      <div className="flex items-center justify-between border-b border-[#e0e0e0] pb-3 overflow-x-auto scrollbar-none">
+        <div className="flex items-center gap-6">
+          {categories.map((cat) => (
             <button
-              key={cond.id}
-              onClick={() => onSelectCondition(cond.id)}
-              className={`px-3 py-1 rounded-md text-[11px] font-medium transition-colors ${
-                selectedCondition === cond.id
-                  ? 'bg-blue-600/20 text-blue-400 border border-blue-500/40'
-                  : 'bg-zinc-900/50 text-zinc-400 hover:text-zinc-200 border border-white/5'
+              key={cat.id}
+              onClick={() => onSelectCategory(cat.id)}
+              className={`text-[17px] font-normal transition-colors pb-2 -mb-3 border-b-2 ${
+                selectedCategory === cat.id
+                  ? 'border-[#0066cc] text-[#1d1d1f] font-semibold'
+                  : 'border-transparent text-[#7a7a7a] hover:text-[#1d1d1f]'
               }`}
             >
-              {cond.label}
+              {cat.label}
             </button>
           ))}
         </div>
 
-        {/* Sort & Count */}
-        <div className="flex items-center gap-3 text-xs text-zinc-400">
-          <span>{totalCount} devices in stock</span>
+        <span className="text-[14px] text-[#7a7a7a] font-normal hidden sm:inline whitespace-nowrap pl-4">
+          {totalCount} products
+        </span>
+      </div>
+
+      {/* Configurator Option Chips (rounded.pill 12px 16px per DESIGN.md) */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-2">
+          {conditions.map((cond) => {
+            const isSelected = selectedCondition === cond.id;
+            return (
+              <button
+                key={cond.id}
+                onClick={() => onSelectCondition(cond.id)}
+                className={`px-4 py-2 rounded-[9999px] text-[14px] font-normal transition-all apple-btn-active ${
+                  isSelected
+                    ? 'bg-[#ffffff] text-[#1d1d1f] border-2 border-[#0071e3] font-semibold'
+                    : 'bg-[#ffffff] text-[#1d1d1f] border border-[#e0e0e0] hover:border-[#7a7a7a]'
+                }`}
+              >
+                {cond.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Sort Select */}
+        <div className="flex items-center gap-2">
+          <span className="text-[12px] text-[#7a7a7a]">Sort:</span>
           <select
             value={sortBy}
             onChange={(e) => onSelectSort(e.target.value as any)}
-            className="bg-zinc-900 border border-white/10 text-xs text-zinc-300 rounded-lg px-2.5 py-1 focus:outline-none focus:border-zinc-500"
+            className="bg-[#ffffff] border border-[#e0e0e0] text-[14px] text-[#1d1d1f] rounded-[9999px] px-3.5 py-1.5 focus:outline-none focus:border-[#0071e3]"
           >
-            <option value="featured">Featured First</option>
+            <option value="featured">Featured</option>
             <option value="price_asc">Price: Low to High</option>
             <option value="price_desc">Price: High to Low</option>
-            <option value="newest">Newest Arrivals</option>
+            <option value="newest">Newest</option>
           </select>
         </div>
       </div>

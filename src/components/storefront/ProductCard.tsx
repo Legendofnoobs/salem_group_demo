@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { ShieldCheck, BatteryCharging, Sparkles, Check, Plus } from 'lucide-react';
 import { ProductType, CartItemType } from '@/types';
 
 interface ProductCardProps {
@@ -54,117 +53,90 @@ export function ProductCard({
   return (
     <div
       onClick={() => onSelectProduct(product)}
-      className="apple-glass-card rounded-2xl overflow-hidden flex flex-col group cursor-pointer border border-white/10 hover:border-white/20 transition-all duration-300"
+      className="bg-[#ffffff] border border-[#e0e0e0] rounded-[18px] p-6 flex flex-col justify-between cursor-pointer hover:border-[#b0b0b5] transition-colors"
     >
-      {/* Top Image Preview & Badges */}
-      <div className="relative aspect-[4/3] w-full bg-zinc-950 overflow-hidden flex items-center justify-center p-4">
-        {/* Condition Badge */}
-        <div className="absolute top-3 left-3 z-10">
+      {/* Top: Product Image with Signature Apple Drop-Shadow */}
+      <div>
+        <div className="aspect-[4/3] w-full flex items-center justify-center p-2 mb-4">
+          {mainImage ? (
+            <img
+              src={mainImage}
+              alt={product.title}
+              className="w-full h-full object-contain apple-product-shadow"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-[#7a7a7a] text-[14px]">
+              No Image
+            </div>
+          )}
+        </div>
+
+        {/* Condition Tag */}
+        <div className="mb-2">
           {product.condition === 'NEW_SEALED' && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-emerald-950/80 text-emerald-400 border border-emerald-500/40 backdrop-blur-md">
-              <Sparkles className="w-3 h-3" /> Sealed Box
+            <span className="text-[12px] font-semibold text-[#0066cc] uppercase tracking-[0.2px]">
+              Brand New Sealed
             </span>
           )}
           {product.condition === 'OPEN_BOX' && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-amber-950/80 text-amber-300 border border-amber-500/40 backdrop-blur-md">
-              <BatteryCharging className="w-3 h-3" /> Open Box • 100% Battery
+            <span className="text-[12px] font-semibold text-[#7a7a7a] uppercase tracking-[0.2px]">
+              Open Box • 100% Battery
             </span>
           )}
           {product.condition === 'CERTIFIED_PRE_OWNED' && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-purple-950/80 text-purple-300 border border-purple-500/40 backdrop-blur-md">
-              <ShieldCheck className="w-3 h-3" /> Pre-Owned • {product.batteryHealth}% Battery
+            <span className="text-[12px] font-semibold text-[#bf5af2] uppercase tracking-[0.2px]">
+              Salem Certified • {product.batteryHealth}% Battery
             </span>
           )}
         </div>
 
-        {/* Stock Badge */}
-        {product.stock <= 2 && (
-          <span className="absolute top-3 right-3 z-10 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-red-950/80 text-red-400 border border-red-500/30">
-            Only {product.stock} left
-          </span>
-        )}
+        {/* Product Title (body-strong: 17px / 600 / line-height 1.24) */}
+        <h3 className="text-[17px] font-semibold text-[#1d1d1f] tracking-[-0.374px] leading-[1.24]">
+          {product.title}
+        </h3>
 
-        {/* Product Image (Base64) */}
-        {mainImage ? (
-          <img
-            src={mainImage}
-            alt={product.title}
-            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-zinc-600">
-            No Image
+        {/* Description / Chip snippet (caption: 14px / 400) */}
+        <p className="text-[14px] text-[#7a7a7a] font-normal leading-[1.43] mt-1.5 line-clamp-2">
+          {product.description}
+        </p>
+
+        {/* Color variants hint */}
+        {product.variants && product.variants.length > 1 && (
+          <div className="flex items-center gap-1.5 mt-3">
+            {product.variants.map((v) => (
+              <span
+                key={v.id}
+                title={v.colorName}
+                className="w-3 h-3 rounded-full border border-black/15 inline-block"
+                style={{ backgroundColor: v.colorHex }}
+              />
+            ))}
           </div>
         )}
       </div>
 
-      {/* Card Info */}
-      <div className="p-5 flex-1 flex flex-col justify-between">
+      {/* Bottom: Pricing & Action Blue Pill CTA */}
+      <div className="pt-6 mt-4 border-t border-[#f0f0f0] flex items-end justify-between">
         <div>
-          {/* Category & Chip tag */}
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-[10px] uppercase tracking-wider font-semibold text-zinc-400">
-              {product.category}
-            </span>
-            {product.specs?.chip && (
-              <span className="text-[10px] font-medium text-blue-400 bg-blue-950/50 px-2 py-0.5 rounded-full border border-blue-500/20">
-                {product.specs.chip.split('(')[0]}
+          <div className="text-[17px] font-normal text-[#1d1d1f] tracking-[-0.374px]">
+            {currency === 'USD' ? `$${displayPrice.toLocaleString()}` : `${displayPrice.toLocaleString()} EGP`}
+            {displaySalePrice && (
+              <span className="text-[14px] text-[#7a7a7a] line-through ml-2">
+                {currency === 'USD' ? `$${displaySalePrice.toLocaleString()}` : `${displaySalePrice.toLocaleString()} EGP`}
               </span>
             )}
           </div>
-
-          {/* Title */}
-          <h3 className="text-sm font-semibold text-white group-hover:text-blue-400 transition-colors line-clamp-1">
-            {product.title}
-          </h3>
-
-          {/* Key Specs snippet */}
-          <p className="text-xs text-zinc-400 mt-1 line-clamp-2 leading-relaxed">
-            {product.description}
-          </p>
-
-          {/* Available Variants hint */}
-          {product.variants && product.variants.length > 1 && (
-            <div className="flex items-center gap-1.5 mt-3">
-              <span className="text-[10px] text-zinc-400 font-medium">Colors:</span>
-              <div className="flex items-center gap-1">
-                {product.variants.map((v) => (
-                  <span
-                    key={v.id}
-                    title={v.colorName}
-                    className="w-3 h-3 rounded-full border border-white/20 inline-block"
-                    style={{ backgroundColor: v.colorHex }}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
+          <span className="text-[12px] text-[#7a7a7a] font-normal block mt-0.5">
+            Cash On Delivery (COD)
+          </span>
         </div>
 
-        {/* Pricing & CTA */}
-        <div className="pt-4 mt-4 border-t border-white/10 flex items-center justify-between">
-          <div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-base font-bold text-white">
-                {currency === 'USD' ? `$${displayPrice.toLocaleString()}` : `${displayPrice.toLocaleString()} EGP`}
-              </span>
-              {displaySalePrice && (
-                <span className="text-xs text-zinc-400 line-through">
-                  {currency === 'USD' ? `$${displaySalePrice.toLocaleString()}` : `${displaySalePrice.toLocaleString()} EGP`}
-                </span>
-              )}
-            </div>
-            <span className="text-[10px] text-emerald-400 font-medium block">
-              COD • Inspect upon delivery
-            </span>
-          </div>
-
+        <div className="flex items-center gap-2">
           <button
             onClick={handleQuickAdd}
-            className="p-2.5 rounded-full bg-zinc-800 text-white hover:bg-white hover:text-black transition-colors"
-            title="Add to Bag"
+            className="px-4 py-2 rounded-[9999px] bg-[#0066cc] text-[#ffffff] text-[14px] font-normal hover:bg-[#0071e3] apple-btn-active transition-all"
           >
-            <Plus className="w-4 h-4" />
+            Buy
           </button>
         </div>
       </div>

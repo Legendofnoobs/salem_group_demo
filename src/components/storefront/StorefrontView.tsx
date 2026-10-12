@@ -14,7 +14,6 @@ import { ProductType, ProductCategory, ProductCondition, CartItemType, OrderType
 import { getProducts } from '@/actions/products';
 import { trackEvent } from '@/actions/analytics';
 import { getClientSessionId, detectTrafficSource } from '@/lib/session';
-import { SearchX, Sparkles, MessageCircle, RefreshCw } from 'lucide-react';
 
 interface StorefrontViewProps {
   initialProducts: ProductType[];
@@ -30,7 +29,6 @@ export function StorefrontView({ initialProducts, usdRate, onToggleAdmin }: Stor
   const [searchQuery, setSearchQuery] = useState('');
   const [currency, setCurrency] = useState<'EGP' | 'USD'>('EGP');
 
-  // Modals & Drawers state
   const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(null);
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -38,7 +36,6 @@ export function StorefrontView({ initialProducts, usdRate, onToggleAdmin }: Stor
   const [isTradeInOpen, setIsTradeInOpen] = useState(false);
   const [isTrackingOpen, setIsTrackingOpen] = useState(false);
 
-  // Session & Traffic detection
   const [sessionId, setSessionId] = useState('');
   const [trafficSource, setTrafficSource] = useState('Direct');
 
@@ -51,7 +48,6 @@ export function StorefrontView({ initialProducts, usdRate, onToggleAdmin }: Stor
     setTrafficSource(source);
   }, []);
 
-  // Filter products dynamically
   useEffect(() => {
     const filterAndSearch = async () => {
       if (!sessionId) return;
@@ -70,7 +66,6 @@ export function StorefrontView({ initialProducts, usdRate, onToggleAdmin }: Stor
     return () => clearTimeout(timer);
   }, [activeCategory, activeCondition, searchQuery, sortBy, sessionId, trafficSource]);
 
-  // Cart operations
   const handleAddToCart = async (item: CartItemType) => {
     setCartItems((prev) => {
       const existingIdx = prev.findIndex(
@@ -84,7 +79,6 @@ export function StorefrontView({ initialProducts, usdRate, onToggleAdmin }: Stor
       return [...prev, item];
     });
 
-    // Track analytics event: ADD_TO_CART
     if (sessionId) {
       await trackEvent({
         eventType: 'ADD_TO_CART',
@@ -142,14 +136,10 @@ export function StorefrontView({ initialProducts, usdRate, onToggleAdmin }: Stor
     }
   };
 
-  const handleOrderSuccess = (order: OrderType) => {
-    setCartItems([]);
-  };
-
   const totalCartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div className="min-h-screen bg-[#ffffff] text-[#1d1d1f] flex flex-col font-sans">
       {/* Navigation */}
       <Navbar
         activeCategory={activeCategory}
@@ -168,15 +158,25 @@ export function StorefrontView({ initialProducts, usdRate, onToggleAdmin }: Stor
         onToggleCurrency={() => setCurrency((c) => (c === 'EGP' ? 'USD' : 'EGP'))}
       />
 
-      {/* Hero Banner */}
+      {/* Hero Showcase Tiles (DESIGN.md alternating light & dark canvases) */}
       <HeroBanner
         onScrollToCatalog={() => catalogRef.current?.scrollIntoView({ behavior: 'smooth' })}
         onOpenTradeIn={() => setIsTradeInOpen(true)}
       />
 
-      {/* Product Catalog Section */}
-      <main ref={catalogRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full">
-        {/* Category Pills & Filters */}
+      {/* Main Store Catalog Section */}
+      <main ref={catalogRef} className="max-w-[1200px] mx-auto px-4 sm:px-8 py-16 flex-1 w-full">
+        {/* Section Header */}
+        <div className="mb-8">
+          <h2 className="text-[34px] sm:text-[40px] font-semibold text-[#1d1d1f] tracking-[-0.28px] font-display">
+            Explore All Models.
+          </h2>
+          <p className="text-[17px] text-[#7a7a7a] mt-1 font-normal">
+            Certified Apple products with full local warranty and Cash on Delivery in Egypt.
+          </p>
+        </div>
+
+        {/* Category Pills & Sub-Filters */}
         <CategoryPills
           selectedCategory={activeCategory}
           onSelectCategory={setActiveCategory}
@@ -187,35 +187,31 @@ export function StorefrontView({ initialProducts, usdRate, onToggleAdmin }: Stor
           totalCount={products.length}
         />
 
-        {/* Product Grid or Zero-Results View */}
+        {/* Product Cards Grid or Zero-Results */}
         {products.length === 0 ? (
-          <div className="text-center py-20 px-4 rounded-3xl bg-zinc-950/60 border border-white/10 my-8">
-            <div className="w-16 h-16 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center mx-auto mb-4 text-zinc-500">
-              <SearchX className="w-8 h-8" />
-            </div>
-            <h3 className="text-xl font-bold text-white mb-2">
-              No matching Apple devices found
+          <div className="text-center py-24 px-4 bg-[#f5f5f7] border border-[#e0e0e0] rounded-[18px]">
+            <h3 className="text-[28px] font-semibold text-[#1d1d1f] mb-2 font-display">
+              No matching Apple products found
             </h3>
-            <p className="text-xs text-zinc-400 max-w-md mx-auto mb-6">
-              We logged this search query ({searchQuery ? `"${searchQuery}"` : 'selected filters'}). Our procurement team will review restocking options for Salem Group.
+            <p className="text-[17px] text-[#7a7a7a] max-w-md mx-auto mb-6">
+              We logged your search query. Our Salem Group inventory team will review availability.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <div className="flex items-center justify-center gap-3">
               <button
                 onClick={() => {
                   setSearchQuery('');
                   setActiveCategory('all');
                   setActiveCondition('ALL');
                 }}
-                className="px-6 py-2.5 rounded-full bg-white text-black font-semibold text-xs hover:bg-zinc-200 transition-colors"
+                className="px-6 py-2.5 rounded-[9999px] bg-[#0066cc] text-white text-[14px] font-normal hover:bg-[#0071e3] apple-btn-active"
               >
-                Clear Filters
+                Clear Search
               </button>
               <button
                 onClick={() => setIsTradeInOpen(true)}
-                className="px-6 py-2.5 rounded-full bg-zinc-900 border border-white/20 text-white font-medium text-xs hover:bg-zinc-800 transition-colors flex items-center gap-2"
+                className="px-6 py-2.5 rounded-[9999px] border border-[#0066cc] text-[#0066cc] text-[14px] font-normal hover:bg-[#0066cc]/5 apple-btn-active"
               >
-                <RefreshCw className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Trade In an Old Device</span>
+                Trade In Old Device
               </button>
             </div>
           </div>
@@ -235,26 +231,32 @@ export function StorefrontView({ initialProducts, usdRate, onToggleAdmin }: Stor
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-white/10 bg-zinc-950 py-12 px-4 sm:px-6 lg:px-8 text-xs text-zinc-500">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2 text-zinc-400">
-            <span className="font-bold text-white tracking-wider"> SALEM GROUP</span>
-            <span>•</span>
-            <span>Authorized Apple Experience & Certified Reseller</span>
+      {/* Apple Footer (DESIGN.md footer spec: #f5f5f7 parchment, fine-print 12px) */}
+      <footer className="bg-[#f5f5f7] border-t border-[#e0e0e0] py-12 px-4 sm:px-8 text-[#7a7a7a] text-[12px]">
+        <div className="max-w-[1024px] mx-auto space-y-4">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#e0e0e0] pb-6">
+            <span className="font-semibold text-[#1d1d1f] text-[14px]">
+               Salem Group — Apple Authorized Reseller
+            </span>
+            <div className="flex items-center gap-4 text-[12px]">
+              <span>Cash on Delivery (COD)</span>
+              <span>•</span>
+              <span>Inspect Before Paying</span>
+              <span>•</span>
+              <span>Cairo Showroom</span>
+            </div>
           </div>
 
-          <div className="flex items-center gap-6 text-[11px]">
-            <span>Cash On Delivery with Inspection</span>
-            <span>•</span>
-            <span>1-Year Official Warranty</span>
-            <span>•</span>
-            <span>Cairo Showroom</span>
-          </div>
+          <p className="text-[11px] leading-[1.5]">
+            1. Cash On Delivery available across all governorates in Egypt. Customers have the right to unbox, inspect hardware, and verify serial numbers prior to payment.
+          </p>
+          <p className="text-[11px] leading-[1.5]">
+            Copyright © 2026 Salem Group. All rights reserved. Apple, the Apple logo, MacBook Pro, iPhone, iPad, and Apple Watch are trademarks of Apple Inc.
+          </p>
         </div>
       </footer>
 
-      {/* PDP Modal */}
+      {/* Modals */}
       <ProductModal
         product={selectedProduct}
         onClose={() => setSelectedProduct(null)}
@@ -264,7 +266,6 @@ export function StorefrontView({ initialProducts, usdRate, onToggleAdmin }: Stor
         onDirectOrder={handleDirectOrder}
       />
 
-      {/* Trade-In Modal */}
       <TradeInModal
         isOpen={isTradeInOpen}
         onClose={() => setIsTradeInOpen(false)}
@@ -272,7 +273,6 @@ export function StorefrontView({ initialProducts, usdRate, onToggleAdmin }: Stor
         usdRate={usdRate}
       />
 
-      {/* Cart Drawer */}
       <CartDrawer
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
@@ -284,19 +284,17 @@ export function StorefrontView({ initialProducts, usdRate, onToggleAdmin }: Stor
         onProceedToCheckout={handleProceedToCheckout}
       />
 
-      {/* COD Checkout Modal */}
       <CODCheckoutModal
         isOpen={isCheckoutOpen}
         onClose={() => setIsCheckoutOpen(false)}
         items={cartItems}
-        onOrderSuccess={handleOrderSuccess}
+        onOrderSuccess={() => setCartItems([])}
         currency={currency}
         usdRate={usdRate}
         sessionId={sessionId}
         trafficSource={trafficSource}
       />
 
-      {/* Order Tracking Modal */}
       <OrderTrackingModal
         isOpen={isTrackingOpen}
         onClose={() => setIsTrackingOpen(false)}

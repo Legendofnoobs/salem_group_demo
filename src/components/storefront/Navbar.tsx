@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ShoppingBag, Search, ShieldCheck, RefreshCw, LayoutDashboard, X, Smartphone, Laptop } from 'lucide-react';
+import { ShoppingBag, Search, X, ShieldCheck } from 'lucide-react';
 import { ProductCategory } from '@/types';
 
 interface NavbarProps {
@@ -31,155 +31,156 @@ export function Navbar({
   currency,
   onToggleCurrency,
 }: NavbarProps) {
-  const [showSearchInput, setShowSearchInput] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
 
   const categories: Array<{ id: ProductCategory; label: string }> = [
-    { id: 'all', label: 'All Products' },
-    { id: 'mac', label: 'MacBook' },
+    { id: 'all', label: 'Store' },
+    { id: 'mac', label: 'Mac' },
     { id: 'iphone', label: 'iPhone' },
     { id: 'ipad', label: 'iPad' },
-    { id: 'watch', label: 'Apple Watch' },
+    { id: 'watch', label: 'Watch' },
     { id: 'airpods', label: 'AirPods' },
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full apple-glass border-b border-white/10 transition-all">
-      {/* Top Banner Notice */}
-      <div className="bg-gradient-to-r from-zinc-950 via-zinc-900 to-zinc-950 border-b border-white/5 py-1.5 px-4 text-center text-xs text-zinc-400 flex items-center justify-center gap-3">
-        <span className="flex items-center gap-1.5 text-emerald-400 font-medium">
-          <ShieldCheck className="w-3.5 h-3.5" /> Cash on Delivery (COD)
-        </span>
-        <span className="hidden sm:inline">•</span>
-        <span className="hidden sm:inline">Inspect & test device before paying</span>
-        <span>•</span>
-        <span className="text-zinc-300">1-Year Salem Warranty</span>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-        {/* Brand / Logo */}
-        <div className="flex items-center gap-6">
+    <header className="sticky top-0 z-40 w-full">
+      {/* 1. Global Nav (44px true black #000000, 12px typography, quiet Apple style) */}
+      <div className="bg-[#000000] text-[#ffffff] h-[44px] flex items-center px-4 sm:px-8 border-b border-[#333333]/40">
+        <div className="max-w-[1024px] mx-auto w-full flex items-center justify-between text-[12px] font-normal tracking-[-0.12px]">
+          {/* Apple Logo & Store Name */}
           <button
             onClick={() => onSelectCategory('all')}
-            className="flex items-center gap-2 group text-left"
+            className="flex items-center gap-2 hover:opacity-75 transition-opacity"
           >
-            <div className="w-8 h-8 rounded-lg bg-zinc-800 border border-white/15 flex items-center justify-center group-hover:border-zinc-500 transition-colors">
-              <span className="text-white font-bold text-sm tracking-tight"></span>
-            </div>
-            <div>
-              <span className="text-sm font-semibold tracking-wider text-white block uppercase">
-                Salem Group
-              </span>
-              <span className="text-[10px] text-zinc-400 tracking-wide block -mt-0.5">
-                Apple Reseller
-              </span>
-            </div>
+            <span className="text-[15px] font-semibold leading-none"></span>
+            <span className="font-semibold tracking-normal text-[13px]">Salem Group</span>
           </button>
 
-          {/* Desktop Nav Links */}
-          <nav className="hidden md:flex items-center gap-1">
+          {/* Desktop Categories */}
+          <nav className="hidden md:flex items-center gap-7">
             {categories.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => onSelectCategory(cat.id)}
-                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-                  activeCategory === cat.id
-                    ? 'bg-white text-black font-semibold'
-                    : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                className={`transition-opacity hover:opacity-100 ${
+                  activeCategory === cat.id ? 'text-[#ffffff] font-semibold' : 'text-[#cccccc] opacity-80'
                 }`}
               >
                 {cat.label}
               </button>
             ))}
+            <button
+              onClick={onOpenTradeIn}
+              className="text-[#cccccc] opacity-80 hover:opacity-100 hover:text-[#2997ff] transition-all"
+            >
+              Trade In
+            </button>
+            <button
+              onClick={onOpenTracking}
+              className="text-[#cccccc] opacity-80 hover:opacity-100 transition-opacity"
+            >
+              Support
+            </button>
           </nav>
-        </div>
 
-        {/* Center / Right Controls */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          {/* Live Search */}
-          <div className="relative">
-            {showSearchInput ? (
-              <div className="flex items-center bg-zinc-900 border border-zinc-700 rounded-full px-3 py-1 w-48 sm:w-64 transition-all">
-                <Search className="w-3.5 h-3.5 text-zinc-400 mr-2 flex-shrink-0" />
-                <input
-                  type="text"
-                  placeholder="Search Mac, iPhone..."
-                  value={searchQuery}
-                  onChange={(e) => onSearchChange(e.target.value)}
-                  autoFocus
-                  className="bg-transparent text-xs text-white placeholder-zinc-500 focus:outline-none w-full"
-                />
-                <button
-                  onClick={() => {
-                    setShowSearchInput(false);
-                    onSearchChange('');
-                  }}
-                  className="text-zinc-400 hover:text-white ml-1"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            ) : (
+          {/* Right Action Icons */}
+          <div className="flex items-center gap-4 text-[#cccccc]">
+            {/* Search Trigger */}
+            <button
+              onClick={() => setShowSearch(!showSearch)}
+              className="hover:text-white transition-colors p-1"
+              title="Search"
+            >
+              <Search className="w-3.5 h-3.5" />
+            </button>
+
+            {/* Currency */}
+            <button
+              onClick={onToggleCurrency}
+              className="text-[11px] font-medium text-[#cccccc] hover:text-white transition-colors"
+            >
+              {currency}
+            </button>
+
+            {/* Shopping Bag */}
+            <button
+              onClick={onOpenCart}
+              className="relative hover:text-white transition-colors p-1"
+              title="Shopping Bag"
+            >
+              <ShoppingBag className="w-3.5 h-3.5" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-[#0066cc] text-white text-[9px] font-bold w-3.5 h-3.5 rounded-full flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </button>
+
+            {/* Admin Switcher */}
+            <button
+              onClick={onToggleAdmin}
+              className="text-[11px] font-medium px-2.5 py-0.5 rounded-[9999px] bg-[#1d1d1f] hover:bg-[#333333] text-white transition-colors border border-[#333333]"
+            >
+              Admin
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Sub-Nav Frosted (52px, #f5f5f7 parchment with backdrop blur, 1px border) */}
+      <div className="apple-frosted h-[52px] flex items-center px-4 sm:px-8">
+        <div className="max-w-[1024px] mx-auto w-full flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="text-[19px] sm:text-[21px] font-semibold text-[#1d1d1f] tracking-[0.231px]">
+              Apple Authorized Reseller
+            </span>
+            <span className="hidden sm:inline-block text-[12px] text-[#7a7a7a] font-normal border-l border-[#e0e0e0] pl-3">
+              Cairo, Egypt
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {/* Cash on Delivery Notice */}
+            <span className="hidden lg:flex items-center gap-1.5 text-[12px] text-[#1d1d1f] font-normal">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#0066cc]" />
+              Cash On Delivery with Inspection
+            </span>
+
+            {/* Quick Buy CTA Button */}
+            <button
+              onClick={() => onSelectCategory('all')}
+              className="px-4 py-1.5 rounded-[9999px] bg-[#0066cc] text-white text-[12px] font-normal hover:bg-[#0071e3] apple-btn-active transition-all"
+            >
+              Shop Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Expandable Search Input (Pill Shaped per DESIGN.md search-input) */}
+      {showSearch && (
+        <div className="bg-[#f5f5f7] border-b border-[#e0e0e0] py-3 px-4 transition-all">
+          <div className="max-w-[640px] mx-auto relative flex items-center">
+            <Search className="w-4 h-4 text-[#7a7a7a] absolute left-4 pointer-events-none" />
+            <input
+              type="text"
+              autoFocus
+              placeholder="Search Mac, iPhone, iPad, Apple Watch..."
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+              className="w-full h-[44px] pl-11 pr-10 rounded-[9999px] bg-[#ffffff] border border-[#e0e0e0] text-[17px] text-[#1d1d1f] placeholder-[#7a7a7a] focus:outline-none focus:border-[#0071e3] transition-colors"
+            />
+            {searchQuery && (
               <button
-                onClick={() => setShowSearchInput(true)}
-                className="p-2 rounded-full text-zinc-400 hover:text-white hover:bg-white/5 transition-colors"
-                title="Search Apple Products"
+                onClick={() => onSearchChange('')}
+                className="absolute right-3.5 text-[#7a7a7a] hover:text-[#1d1d1f]"
               >
-                <Search className="w-4 h-4" />
+                <X className="w-4 h-4" />
               </button>
             )}
           </div>
-
-          {/* Currency Switcher */}
-          <button
-            onClick={onToggleCurrency}
-            className="px-2.5 py-1 rounded-full text-xs font-semibold bg-zinc-900 border border-white/10 text-zinc-300 hover:text-white hover:border-zinc-600 transition-colors"
-            title="Toggle Currency"
-          >
-            {currency}
-          </button>
-
-          {/* Trade-In Estimator Button */}
-          <button
-            onClick={onOpenTradeIn}
-            className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-900/60 transition-colors"
-          >
-            <RefreshCw className="w-3 h-3 text-emerald-400" />
-            <span>Apple Trade-In</span>
-          </button>
-
-          {/* Order Tracking */}
-          <button
-            onClick={onOpenTracking}
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-zinc-300 hover:text-white hover:bg-white/5 transition-colors"
-          >
-            <span>Track Order</span>
-          </button>
-
-          {/* Cart Bag */}
-          <button
-            onClick={onOpenCart}
-            className="relative p-2 rounded-full bg-zinc-900 border border-white/10 text-zinc-200 hover:text-white hover:border-zinc-600 transition-colors"
-            title="Shopping Bag"
-          >
-            <ShoppingBag className="w-4 h-4" />
-            {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-blue-500 text-white font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center animate-pulse">
-                {cartCount}
-              </span>
-            )}
-          </button>
-
-          {/* Switch to Admin Mode */}
-          <button
-            onClick={onToggleAdmin}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-zinc-800 to-zinc-900 border border-white/20 text-white hover:border-zinc-400 transition-all shadow-sm"
-            title="Open Merchant Admin Dashboard"
-          >
-            <LayoutDashboard className="w-3.5 h-3.5 text-blue-400" />
-            <span className="hidden sm:inline">Admin</span>
-          </button>
         </div>
-      </div>
+      )}
     </header>
   );
 }

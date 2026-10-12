@@ -47,7 +47,7 @@ export function AdminPortalView({
   const newLeadsCount = initialLeads.filter((l) => l.status === 'NEW_LEAD').length;
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div className="min-h-screen bg-[#f5f5f7] text-[#1d1d1f] flex flex-col font-sans">
       <AdminHeader
         activeTab={activeTab}
         onSelectTab={setActiveTab}
@@ -83,7 +83,7 @@ export function AdminPortalView({
         )}
       </main>
 
-      <footer className="border-t border-white/10 bg-zinc-950 py-6 px-4 text-center text-xs text-zinc-500">
+      <footer className="border-t border-[#e0e0e0] bg-[#ffffff] py-6 px-4 text-center text-[12px] text-[#86868b]">
         <span> Salem Group Merchant Portal • Connected to Local PostgreSQL 18</span>
       </footer>
     </div>
