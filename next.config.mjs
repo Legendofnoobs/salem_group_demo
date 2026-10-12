@@ -8,6 +8,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  serverExternalPackages: ['@prisma/client', 'prisma'],
   allowedDevOrigins: ['192.168.100.178:3000']
 };
 
