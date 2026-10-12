@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ShoppingCart, Truck, ShieldCheck, MessageCircle, Phone, CheckCircle2, Clock, XCircle, Search } from 'lucide-react';
+import { MessageCircle, Phone } from 'lucide-react';
 import { OrderType, OrderStatus } from '@/types';
 import { updateOrderStatus } from '@/actions/orders';
 
@@ -20,8 +20,8 @@ export function OrderPipeline({ initialOrders, onOrderUpdated }: OrderPipelinePr
     { id: 'ALL', label: 'All Orders' },
     { id: 'PENDING', label: 'Pending Review' },
     { id: 'CONFIRMED', label: 'Confirmed' },
-    { id: 'SHIPPED', label: 'Out for Delivery (Collecting Cash)' },
-    { id: 'DELIVERED', label: 'Delivered & Paid' },
+    { id: 'SHIPPED', label: 'Out for Delivery' },
+    { id: 'DELIVERED', label: 'Delivered' },
     { id: 'CANCELLED', label: 'Cancelled' },
   ];
 
@@ -33,7 +33,6 @@ export function OrderPipeline({ initialOrders, onOrderUpdated }: OrderPipelinePr
     if (res.success && res.order) {
       setOrders((prev) => prev.map((o) => (o.id === orderId ? res.order : o)));
       if (res.customerWhatsAppUrl) {
-        // Open WhatsApp update link in new tab for merchant convenience!
         window.open(res.customerWhatsAppUrl, '_blank');
       }
       onOrderUpdated?.();
@@ -55,41 +54,37 @@ export function OrderPipeline({ initialOrders, onOrderUpdated }: OrderPipelinePr
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-[#1d1d1f]">
       {/* Title & Filter Tabs */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider block mb-1">
-            Cash On Delivery Fulfillment Pipeline
-          </span>
-          <h2 className="text-2xl font-bold text-white">COD Orders & Deliveries</h2>
-          <p className="text-xs text-zinc-400 mt-1">
-            Track customer shipments, trigger courier status, and send instant WhatsApp dispatch updates.
+          <h2 className="text-[34px] font-semibold text-[#1d1d1f] tracking-[-0.374px] font-display">
+            Cash On Delivery Orders
+          </h2>
+          <p className="text-[17px] text-[#7a7a7a] mt-0.5">
+            Manage dispatch status and message customers via WhatsApp.
           </p>
         </div>
 
-        {/* Search */}
-        <div className="w-full sm:w-64">
-          <input
-            type="text"
-            placeholder="Search order #, customer, phone..."
-            value={searchVal}
-            onChange={(e) => setSearchVal(e.target.value)}
-            className="w-full bg-zinc-900 border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500"
-          />
-        </div>
+        <input
+          type="text"
+          placeholder="Search order #, customer, phone..."
+          value={searchVal}
+          onChange={(e) => setSearchVal(e.target.value)}
+          className="w-full sm:w-64 bg-[#f5f5f7] border border-[#e0e0e0] rounded-[9999px] px-4 py-2 text-[14px] text-[#1d1d1f] focus:outline-none focus:border-[#0071e3]"
+        />
       </div>
 
-      {/* Status Filter Tabs */}
+      {/* Status Filter Chips */}
       <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
         {statuses.map((st) => (
           <button
             key={st.id}
             onClick={() => setStatusFilter(st.id)}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+            className={`px-4 py-1.5 rounded-[9999px] text-[14px] font-normal transition-all apple-btn-active ${
               statusFilter === st.id
-                ? 'bg-white text-black shadow-md'
-                : 'bg-zinc-900 border border-white/10 text-zinc-400 hover:text-white'
+                ? 'bg-[#ffffff] text-[#1d1d1f] border-2 border-[#0071e3] font-semibold'
+                : 'bg-[#ffffff] text-[#7a7a7a] border border-[#e0e0e0] hover:border-[#b0b0b5]'
             }`}
           >
             {st.label}
@@ -99,8 +94,8 @@ export function OrderPipeline({ initialOrders, onOrderUpdated }: OrderPipelinePr
 
       {/* Orders List */}
       {filteredOrders.length === 0 ? (
-        <div className="p-16 text-center rounded-3xl bg-zinc-900/40 border border-white/10 text-zinc-500 text-xs">
-          No orders matching current filter.
+        <div className="p-16 text-center rounded-[18px] bg-[#f5f5f7] border border-[#e0e0e0] text-[#7a7a7a] text-[14px]">
+          No orders found.
         </div>
       ) : (
         <div className="space-y-4">
@@ -111,87 +106,68 @@ export function OrderPipeline({ initialOrders, onOrderUpdated }: OrderPipelinePr
             return (
               <div
                 key={order.id}
-                className="p-6 rounded-3xl bg-zinc-900/60 border border-white/10 space-y-4 hover:border-zinc-500 transition-colors"
+                className="p-6 rounded-[18px] bg-[#ffffff] border border-[#e0e0e0] space-y-4 hover:border-[#b0b0b5] transition-colors"
               >
-                {/* Header Row */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-white/10">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-zinc-800 border border-white/10 flex items-center justify-center font-mono font-bold text-sm text-white">
-                      #{order.orderNumber.replace('SLM-', '')}
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h4 className="text-sm font-bold text-white">{order.customerName}</h4>
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-400 font-mono">
-                          {order.orderNumber}
-                        </span>
-                      </div>
-                      <span className="text-xs text-zinc-400 block mt-0.5">
-                        {order.shippingAddress}, {order.city} • via {order.trafficSource || 'Direct'}
+                {/* Header */}
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-[#f0f0f0]">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold text-[17px] text-[#1d1d1f]">
+                        {order.customerName}
+                      </span>
+                      <span className="text-[12px] font-mono px-2 py-0.5 rounded-[9999px] bg-[#f5f5f7] border border-[#e0e0e0] text-[#7a7a7a]">
+                        #{order.orderNumber}
                       </span>
                     </div>
+                    <span className="text-[14px] text-[#7a7a7a] block mt-0.5">
+                      {order.shippingAddress}, {order.city} • Channel: {order.trafficSource || 'Direct'}
+                    </span>
                   </div>
 
-                  {/* Right Status Badge & Total */}
                   <div className="flex items-center gap-3">
-                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                      order.status === 'DELIVERED'
-                        ? 'bg-emerald-950 text-emerald-400 border border-emerald-500/40'
-                        : order.status === 'SHIPPED'
-                        ? 'bg-blue-950 text-blue-400 border border-blue-500/40'
-                        : order.status === 'CONFIRMED'
-                        ? 'bg-purple-950 text-purple-300 border border-purple-500/40'
-                        : order.status === 'CANCELLED'
-                        ? 'bg-red-950 text-red-400 border border-red-500/30'
-                        : 'bg-zinc-800 text-zinc-300 border border-white/10'
-                    }`}>
+                    <span className="text-[12px] font-semibold px-3 py-1 rounded-[9999px] bg-[#f5f5f7] border border-[#e0e0e0] text-[#0066cc]">
                       {order.status}
                     </span>
-
-                    <span className="text-base font-bold text-white">
+                    <span className="text-[21px] font-semibold text-[#1d1d1f]">
                       {order.totalAmount.toLocaleString()} EGP
                     </span>
                   </div>
                 </div>
 
-                {/* Items Row */}
-                <div className="space-y-1.5 text-xs text-zinc-300">
-                  <span className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider block">
-                    Ordered Devices:
-                  </span>
+                {/* Items */}
+                <div className="space-y-1.5 text-[14px]">
                   {(order.items as any[]).map((item, idx) => (
-                    <div key={idx} className="flex justify-between items-center py-1 px-3 rounded-lg bg-zinc-950/60 border border-white/5">
+                    <div key={idx} className="flex justify-between py-1 px-3 rounded-[8px] bg-[#f5f5f7]">
                       <span>{item.title} {item.variant ? `(${item.variant})` : ''} x{item.quantity}</span>
-                      <span className="font-semibold text-white">{(item.price * item.quantity).toLocaleString()} EGP</span>
+                      <span className="font-semibold text-[#1d1d1f]">{(item.price * item.quantity).toLocaleString()} EGP</span>
                     </div>
                   ))}
                 </div>
 
                 {order.notes && (
-                  <p className="text-xs text-zinc-400 italic bg-zinc-950/40 p-2.5 rounded-xl border border-white/5">
+                  <p className="text-[12px] text-[#7a7a7a] italic">
                     "{order.notes}"
                   </p>
                 )}
 
                 {/* Actions & WhatsApp Contact */}
-                <div className="pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
-                  {/* Status buttons */}
+                <div className="pt-3 border-t border-[#f0f0f0] flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-zinc-500 mr-1">Update Status:</span>
+                    <span className="text-[12px] text-[#7a7a7a] mr-1">Status:</span>
                     {order.status !== 'CONFIRMED' && (
                       <button
                         onClick={() => handleStatusChange(order.id, 'CONFIRMED')}
                         disabled={updatingId === order.id}
-                        className="px-2.5 py-1 rounded-lg text-xs font-medium bg-purple-950/60 border border-purple-500/30 text-purple-300 hover:bg-purple-900/60"
+                        className="px-3 py-1 rounded-[9999px] text-[12px] font-normal bg-[#f5f5f7] border border-[#e0e0e0] text-[#1d1d1f] hover:bg-[#e0e0e0] apple-btn-active"
                       >
-                        Confirm Order
+                        Confirm
                       </button>
                     )}
                     {order.status !== 'SHIPPED' && (
                       <button
                         onClick={() => handleStatusChange(order.id, 'SHIPPED')}
                         disabled={updatingId === order.id}
-                        className="px-2.5 py-1 rounded-lg text-xs font-medium bg-blue-950/60 border border-blue-500/30 text-blue-300 hover:bg-blue-900/60"
+                        className="px-3 py-1 rounded-[9999px] text-[12px] font-normal bg-[#0066cc] text-white hover:bg-[#0071e3] apple-btn-active"
                       >
                         Dispatch Courier
                       </button>
@@ -200,31 +176,20 @@ export function OrderPipeline({ initialOrders, onOrderUpdated }: OrderPipelinePr
                       <button
                         onClick={() => handleStatusChange(order.id, 'DELIVERED')}
                         disabled={updatingId === order.id}
-                        className="px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-900/60"
+                        className="px-3 py-1 rounded-[9999px] text-[12px] font-normal bg-[#f5f5f7] border border-[#e0e0e0] text-[#34c759] hover:bg-[#e0e0e0] apple-btn-active"
                       >
-                        Mark Delivered & Paid
-                      </button>
-                    )}
-                    {order.status !== 'CANCELLED' && (
-                      <button
-                        onClick={() => handleStatusChange(order.id, 'CANCELLED')}
-                        disabled={updatingId === order.id}
-                        className="px-2.5 py-1 rounded-lg text-xs font-medium bg-red-950/40 text-red-400 hover:bg-red-900/40"
-                      >
-                        Cancel
+                        Delivered & Paid
                       </button>
                     )}
                   </div>
 
-                  {/* Direct Contact Buttons */}
                   <div className="flex items-center gap-2">
                     <a
                       href={`tel:${order.customerPhone}`}
-                      className="p-2 rounded-xl bg-zinc-800 text-zinc-300 hover:text-white transition-colors flex items-center gap-1.5 text-xs"
-                      title="Call Customer"
+                      className="px-3 py-1.5 rounded-[9999px] bg-[#f5f5f7] border border-[#e0e0e0] text-[#1d1d1f] text-[12px] hover:bg-[#e0e0e0] flex items-center gap-1.5"
                     >
-                      <Phone className="w-3.5 h-3.5 text-blue-400" />
-                      <span className="hidden sm:inline">{order.customerPhone}</span>
+                      <Phone className="w-3.5 h-3.5 text-[#0066cc]" />
+                      <span>{order.customerPhone}</span>
                     </a>
 
                     <a
@@ -233,9 +198,9 @@ export function OrderPipeline({ initialOrders, onOrderUpdated }: OrderPipelinePr
                       )}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="px-3 py-1.5 rounded-xl bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-600/40 transition-colors flex items-center gap-1.5 text-xs font-semibold"
+                      className="px-3.5 py-1.5 rounded-[9999px] bg-[#0066cc] text-white text-[12px] font-normal hover:bg-[#0071e3] flex items-center gap-1.5 apple-btn-active"
                     >
-                      <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
+                      <MessageCircle className="w-3.5 h-3.5" />
                       <span>WhatsApp Customer</span>
                     </a>
                   </div>

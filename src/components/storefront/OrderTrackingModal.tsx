@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, Search, PackageCheck, Truck, ShieldCheck, CheckCircle2, Clock } from 'lucide-react';
+import { X, Search, ShieldCheck } from 'lucide-react';
 import { getOrders } from '@/actions/orders';
 import { OrderType } from '@/types';
 
@@ -35,120 +35,78 @@ export function OrderTrackingModal({ isOpen, onClose }: OrderTrackingModalProps)
     setIsSearching(false);
   };
 
-  const getStepStatus = (step: string, currentStatus: string) => {
-    const steps = ['PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED'];
-    const currentIndex = steps.indexOf(currentStatus);
-    const stepIndex = steps.indexOf(step);
-
-    if (currentIndex >= stepIndex) return 'completed';
-    return 'upcoming';
-  };
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md overflow-y-auto">
-      <div className="relative w-full max-w-xl bg-zinc-950 border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl my-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/40 backdrop-blur-sm overflow-y-auto">
+      <div className="relative w-full max-w-xl bg-[#ffffff] border border-[#e0e0e0] rounded-[18px] p-8 my-8 text-[#1d1d1f]">
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full bg-zinc-900 text-zinc-400 hover:text-white transition-colors"
+          className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#f5f5f7] text-[#7a7a7a] hover:text-[#1d1d1f] flex items-center justify-center transition-colors"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4" />
         </button>
 
-        <div className="flex items-center gap-2 mb-2">
-          <div className="w-7 h-7 rounded-lg bg-blue-950/60 border border-blue-500/30 flex items-center justify-center text-blue-400">
-            <PackageCheck className="w-4 h-4" />
-          </div>
-          <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">
-            Salem Order Tracking
-          </span>
-        </div>
-        <h2 className="text-2xl font-bold text-white mb-1">
-          Track Your Order & Warranty
+        <span className="text-[12px] font-semibold text-[#7a7a7a] uppercase tracking-[0.2px] block mb-1">
+          Support & Delivery
+        </span>
+        <h2 className="text-[34px] font-semibold text-[#1d1d1f] tracking-[-0.374px] leading-[1.2] mb-1 font-display">
+          Track Your Order
         </h2>
-        <p className="text-xs text-zinc-400 mb-6">
-          Enter your Order Number (e.g. SLM-1042) or Phone Number to check dispatch and inspection status.
+        <p className="text-[17px] text-[#7a7a7a] leading-[1.47] mb-6">
+          Enter your order number or phone number to check dispatch status.
         </p>
 
         <form onSubmit={handleTrack} className="flex gap-2 mb-6">
           <input
             type="text"
-            placeholder="e.g. SLM-1042 or 0111..."
+            placeholder="e.g. SLM-1042 or 0100..."
             value={searchVal}
             onChange={(e) => setSearchVal(e.target.value)}
-            className="flex-1 bg-zinc-900 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500"
+            className="flex-1 bg-[#f5f5f7] border border-[#e0e0e0] rounded-[11px] px-4 py-2.5 text-[14px] text-[#1d1d1f] focus:outline-none focus:border-[#0071e3]"
           />
           <button
             type="submit"
-            className="px-5 py-2.5 rounded-xl bg-white text-black font-semibold text-xs hover:bg-zinc-200 transition-colors"
+            className="px-6 py-2.5 rounded-[9999px] bg-[#0066cc] text-[#ffffff] text-[14px] font-normal hover:bg-[#0071e3] apple-btn-active"
           >
-            {isSearching ? 'Searching...' : 'Track'}
+            {isSearching ? 'Checking...' : 'Track'}
           </button>
         </form>
 
         {searched && (
           <div>
             {order ? (
-              <div className="p-5 rounded-2xl bg-zinc-900/60 border border-white/10 space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-white/10">
+              <div className="p-5 rounded-[11px] bg-[#f5f5f7] border border-[#e0e0e0] space-y-3">
+                <div className="flex justify-between items-center border-b border-[#e0e0e0] pb-2">
                   <div>
-                    <span className="text-xs font-mono font-bold text-white">
+                    <span className="font-semibold text-[17px] text-[#1d1d1f]">
                       #{order.orderNumber}
                     </span>
-                    <span className="text-xs text-zinc-400 block mt-0.5">
+                    <span className="text-[12px] text-[#7a7a7a] block">
                       {order.customerName} • {order.city}
                     </span>
                   </div>
-                  <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
-                    order.status === 'DELIVERED'
-                      ? 'bg-emerald-950 text-emerald-400 border border-emerald-500/40'
-                      : order.status === 'SHIPPED'
-                      ? 'bg-blue-950 text-blue-400 border border-blue-500/40 animate-pulse'
-                      : 'bg-zinc-800 text-zinc-300'
-                  }`}>
+                  <span className="px-3 py-1 rounded-[9999px] text-[12px] font-semibold bg-[#ffffff] border border-[#e0e0e0] text-[#0066cc]">
                     {order.status}
                   </span>
                 </div>
 
-                {/* Tracking Progress */}
-                <div className="grid grid-cols-4 gap-2 text-center text-[10px]">
-                  <div className={`p-2 rounded-lg border ${getStepStatus('PENDING', order.status) === 'completed' ? 'bg-blue-950/40 border-blue-500/30 text-blue-300' : 'bg-zinc-900/40 border-white/5 text-zinc-600'}`}>
-                    <span>Registered</span>
-                  </div>
-                  <div className={`p-2 rounded-lg border ${getStepStatus('PROCESSING', order.status) === 'completed' ? 'bg-blue-950/40 border-blue-500/30 text-blue-300' : 'bg-zinc-900/40 border-white/5 text-zinc-600'}`}>
-                    <span>Tested</span>
-                  </div>
-                  <div className={`p-2 rounded-lg border ${getStepStatus('SHIPPED', order.status) === 'completed' ? 'bg-blue-950/40 border-blue-500/30 text-blue-300' : 'bg-zinc-900/40 border-white/5 text-zinc-600'}`}>
-                    <span>Out for Delivery</span>
-                  </div>
-                  <div className={`p-2 rounded-lg border ${getStepStatus('DELIVERED', order.status) === 'completed' ? 'bg-emerald-950/40 border-emerald-500/30 text-emerald-300' : 'bg-zinc-900/40 border-white/5 text-zinc-600'}`}>
-                    <span>Delivered</span>
-                  </div>
-                </div>
-
-                {/* Items */}
-                <div className="space-y-1.5 pt-2">
-                  <span className="text-[11px] font-semibold text-zinc-400 block">Items:</span>
+                <div className="space-y-1 text-[14px]">
                   {(order.items as any[]).map((i, idx) => (
-                    <div key={idx} className="flex justify-between text-xs text-zinc-300">
-                      <span>{i.title} {i.variant ? `(${i.variant})` : ''} x{i.quantity}</span>
-                      <span className="font-semibold text-white">{(i.price * i.quantity).toLocaleString()} EGP</span>
+                    <div key={idx} className="flex justify-between text-[#1d1d1f]">
+                      <span>{i.title} x{i.quantity}</span>
+                      <span>{(i.price * i.quantity).toLocaleString()} EGP</span>
                     </div>
                   ))}
                 </div>
 
-                {/* COD & Warranty notes */}
-                <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-1.5 text-emerald-400">
-                    <ShieldCheck className="w-4 h-4" />
-                    <span>COD Amount: {order.totalAmount.toLocaleString()} EGP</span>
-                  </div>
-                  <span className="text-zinc-500 text-[11px]">Salem 1-Yr Warranty Active</span>
+                <div className="pt-2 border-t border-[#e0e0e0] flex justify-between text-[12px] text-[#7a7a7a]">
+                  <span>Total COD: {order.totalAmount.toLocaleString()} EGP</span>
+                  <span>Salem 1-Year Warranty</span>
                 </div>
               </div>
             ) : (
-              <div className="p-6 text-center rounded-2xl bg-zinc-900/40 border border-white/5 text-xs text-zinc-400">
-                No active order found matching <span className="text-white font-mono font-medium">"{searchVal}"</span>. Please double-check your order number or phone.
-              </div>
+              <p className="text-[14px] text-[#7a7a7a] text-center py-4">
+                No order found matching "{searchVal}". Please check your details.
+              </p>
             )}
           </div>
         )}

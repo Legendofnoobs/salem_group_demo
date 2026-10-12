@@ -6,199 +6,163 @@ function createSvgBase64(svg: string): string {
   return `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
 }
 
-// Apple Product SVG Generators
-function macbookSvg(title: string, color: string, chip: string): string {
+// Authentic Transparent Apple Product Renders (No fake background gradients)
+function macbookSvg(title: string, color: string, chipLabel: string): string {
   return createSvgBase64(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
       <defs>
-        <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#141417"/>
-          <stop offset="100%" stop-color="#0a0a0c"/>
-        </linearGradient>
-        <linearGradient id="screenGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#050508"/>
-          <stop offset="50%" stop-color="#1c1630"/>
-          <stop offset="100%" stop-color="#3b1d54"/>
-        </linearGradient>
-        <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id="metalDeck" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stop-color="${color}"/>
-          <stop offset="100%" stop-color="#1f2024"/>
+          <stop offset="100%" stop-color="#141416"/>
         </linearGradient>
-        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="15" result="blur"/>
-          <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-        </filter>
+        <linearGradient id="screenDisplay" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0a0a0c"/>
+          <stop offset="100%" stop-color="#18181c"/>
+        </linearGradient>
       </defs>
-      <rect width="800" height="600" fill="url(#bg)"/>
-      <ellipse cx="400" cy="460" rx="260" ry="25" fill="#000000" opacity="0.6"/>
-      
-      <!-- Screen Lid -->
-      <rect x="180" y="110" width="440" height="280" rx="14" fill="#0c0d10" stroke="${color}" stroke-width="2"/>
-      <!-- Bezel & Display -->
-      <rect x="192" y="122" width="416" height="256" rx="8" fill="url(#screenGrad)"/>
-      <!-- Notch -->
-      <path d="M 370 122 L 430 122 L 426 136 C 424 140 420 142 416 142 L 384 142 C 380 142 376 140 374 136 Z" fill="#0c0d10"/>
-      <!-- Display Visual / Graphic -->
-      <circle cx="400" cy="240" r="60" fill="#a855f7" opacity="0.25" filter="url(#glow)"/>
-      <text x="400" y="240" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display'" font-size="28" font-weight="700" fill="#ffffff" text-anchor="middle">${chip}</text>
-      <text x="400" y="270" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text'" font-size="14" fill="#a1a1aa" text-anchor="middle">Liquid Retina XDR Display</text>
 
-      <!-- Bottom Chassis / Deck -->
-      <path d="M 140 390 L 660 390 L 640 435 L 160 435 Z" fill="url(#metal)" stroke="#3f3f46" stroke-width="1.5"/>
-      <!-- Notch Opening Indent -->
-      <rect x="360" y="390" width="80" height="6" rx="3" fill="#09090b"/>
-      <!-- Base Lip -->
-      <rect x="140" y="432" width="520" height="10" rx="5" fill="#18181b"/>
+      <!-- Soft ground contact shadow -->
+      <ellipse cx="400" cy="410" rx="280" ry="16" fill="rgba(0,0,0,0.22)"/>
+
+      <!-- Screen Outer Lid -->
+      <rect x="190" y="70" width="420" height="270" rx="12" fill="#0d0d0f" stroke="#333336" stroke-width="2"/>
       
-      <!-- Label -->
-      <text x="400" y="520" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display'" font-size="20" font-weight="600" fill="#e4e4e7" text-anchor="middle">${title}</text>
-      <text x="400" y="546" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text'" font-size="13" font-weight="500" fill="#22c55e" text-anchor="middle">✓ Salem Verified • Pro Performance</text>
+      <!-- Display Bezel & Glass -->
+      <rect x="202" y="82" width="396" height="246" rx="6" fill="url(#screenDisplay)"/>
+      
+      <!-- Camera Notch -->
+      <path d="M 372 82 L 428 82 L 424 94 C 422 97 419 99 415 99 L 385 99 C 381 99 378 97 376 94 Z" fill="#0d0d0f"/>
+      <circle cx="400" cy="89" r="2.5" fill="#1f2937"/>
+
+      <!-- Screen Wallpaper & Chip Info -->
+      <rect x="208" y="104" width="384" height="218" rx="4" fill="#111114"/>
+      <!-- Apple Logo Watermark -->
+      <path d="M 395 190 C 395 178 402 173 403 172 C 398 165 390 164 388 164 C 380 163 373 168 369 168 C 365 168 359 163 353 163 C 344 163 336 169 331 178 C 321 195 329 220 338 234 C 343 241 349 248 356 248 C 363 248 366 243 374 243 C 382 243 385 248 392 248 C 399 248 404 241 409 234 C 414 226 416 222 417 220 C 416 219 406 215 406 203 C 406 193 414 188 415 187 C 409 180 401 179 399 179 C 398 179 395 184 395 190 Z" fill="rgba(255,255,255,0.15)"/>
+      <text x="400" y="240" font-family="-apple-system, 'SF Pro Display', sans-serif" font-size="24" font-weight="600" fill="#ffffff" text-anchor="middle">${chipLabel}</text>
+      <text x="400" y="265" font-family="-apple-system, 'SF Pro Text', sans-serif" font-size="13" font-weight="400" fill="#a1a1aa" text-anchor="middle">Liquid Retina XDR • ProMotion 120Hz</text>
+
+      <!-- Bottom Chassis Deck -->
+      <path d="M 140 340 L 660 340 L 642 388 L 158 388 Z" fill="url(#metalDeck)" stroke="#3f3f46" stroke-width="1.5"/>
+      <!-- Notch opening thumb indent -->
+      <rect x="364" y="340" width="72" height="5" rx="2.5" fill="#08080a"/>
+      <!-- Lower base chamfer -->
+      <rect x="140" y="384" width="520" height="12" rx="6" fill="#18181b"/>
+      <!-- Black rubber feet -->
+      <rect x="170" y="396" width="36" height="4" rx="2" fill="#0a0a0c"/>
+      <rect x="594" y="396" width="36" height="4" rx="2" fill="#0a0a0c"/>
     </svg>
   `);
 }
 
-function iphoneSvg(title: string, titaniumHex: string, subtext: string): string {
+function iphoneSvg(title: string, colorHex: string, sub: string): string {
   return createSvgBase64(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 500" width="600" height="500">
       <defs>
-        <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#121316"/>
-          <stop offset="100%" stop-color="#0a0a0c"/>
-        </linearGradient>
-        <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#08080a"/>
-          <stop offset="100%" stop-color="#171324"/>
-        </linearGradient>
-        <linearGradient id="frame" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="${titaniumHex}"/>
-          <stop offset="100%" stop-color="#27272a"/>
+        <linearGradient id="tiFrame" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="${colorHex}"/>
+          <stop offset="100%" stop-color="#242426"/>
         </linearGradient>
       </defs>
-      <rect width="800" height="600" fill="url(#bg)"/>
-      <ellipse cx="400" cy="480" rx="160" ry="20" fill="#000000" opacity="0.6"/>
 
-      <!-- Phone Outer Frame -->
-      <rect x="290" y="90" width="220" height="380" rx="42" fill="url(#frame)" stroke="${titaniumHex}" stroke-width="3"/>
-      <!-- Inner Bezel -->
-      <rect x="296" y="96" width="208" height="368" rx="36" fill="#000000"/>
-      <!-- Screen Glass -->
-      <rect x="300" y="100" width="200" height="360" rx="32" fill="url(#screen)"/>
+      <!-- Contact Shadow -->
+      <ellipse cx="300" cy="425" rx="140" ry="14" fill="rgba(0,0,0,0.22)"/>
+
+      <!-- Phone Outer Titanium Chassis -->
+      <rect x="200" y="60" width="200" height="355" rx="38" fill="url(#tiFrame)" stroke="${colorHex}" stroke-width="2.5"/>
       
+      <!-- Black Bezel -->
+      <rect x="206" y="66" width="188" height="343" rx="32" fill="#000000"/>
+
+      <!-- OLED Display Surface -->
+      <rect x="210" y="70" width="180" height="335" rx="28" fill="#0c0d10"/>
+
       <!-- Dynamic Island -->
-      <rect x="365" y="112" width="70" height="20" rx="10" fill="#000000" stroke="#1f2937" stroke-width="1"/>
-      
-      <!-- Display Content -->
-      <circle cx="400" cy="270" r="45" fill="${titaniumHex}" opacity="0.2"/>
-      <text x="400" y="275" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display'" font-size="22" font-weight="700" fill="#ffffff" text-anchor="middle">Titanium</text>
-      <text x="400" y="305" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text'" font-size="12" fill="#d4d4d8" text-anchor="middle">Super Retina XDR OLED</text>
-      
-      <!-- 48MP Triple Camera Simulation Preview on Edge -->
-      <rect x="315" y="410" width="170" height="30" rx="15" fill="rgba(255,255,255,0.08)"/>
-      <text x="400" y="430" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text'" font-size="11" font-weight="600" fill="#22c55e" text-anchor="middle">48MP Pro Fusion System</text>
+      <rect x="268" y="80" width="64" height="18" rx="9" fill="#000000"/>
+      <circle cx="280" cy="89" r="3.5" fill="#111827"/>
+      <circle cx="316" cy="89" r="3" fill="#1e293b"/>
 
-      <!-- Title / Subtext -->
-      <text x="400" y="525" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display'" font-size="20" font-weight="600" fill="#f4f4f5" text-anchor="middle">${title}</text>
-      <text x="400" y="550" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text'" font-size="13" fill="#a1a1aa" text-anchor="middle">${subtext}</text>
+      <!-- Display Content -->
+      <text x="300" y="210" font-family="-apple-system, 'SF Pro Display', sans-serif" font-size="36" font-weight="600" fill="#ffffff" text-anchor="middle" letter-spacing="-0.5px">09:41</text>
+      <text x="300" y="240" font-family="-apple-system, 'SF Pro Text', sans-serif" font-size="13" font-weight="400" fill="#a1a1aa" text-anchor="middle">Super Retina XDR</text>
+      
+      <!-- A18 Pro Badge -->
+      <rect x="240" y="280" width="120" height="30" rx="15" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+      <text x="300" y="300" font-family="-apple-system, 'SF Pro Text', sans-serif" font-size="12" font-weight="600" fill="${colorHex}" text-anchor="middle">A18 Pro</text>
+
+      <!-- Home Bar Indicator -->
+      <rect x="265" y="392" width="70" height="4" rx="2" fill="#ffffff" opacity="0.8"/>
     </svg>
   `);
 }
 
 function ipadSvg(title: string, color: string): string {
   return createSvgBase64(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
-      <defs>
-        <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#141416"/>
-          <stop offset="100%" stop-color="#0a0a0c"/>
-        </linearGradient>
-        <linearGradient id="oled" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#090a0f"/>
-          <stop offset="50%" stop-color="#0c2340"/>
-          <stop offset="100%" stop-color="#0284c7"/>
-        </linearGradient>
-      </defs>
-      <rect width="800" height="600" fill="url(#bg)"/>
-      <ellipse cx="400" cy="470" rx="220" ry="22" fill="#000000" opacity="0.6"/>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 500" width="600" height="500">
+      <!-- Ground Shadow -->
+      <ellipse cx="300" cy="425" rx="170" ry="14" fill="rgba(0,0,0,0.22)"/>
 
       <!-- iPad Body -->
-      <rect x="230" y="90" width="340" height="360" rx="24" fill="#18181b" stroke="${color}" stroke-width="2.5"/>
-      <!-- Thin Bezel Screen -->
-      <rect x="242" y="102" width="316" height="336" rx="16" fill="url(#oled)"/>
-      <!-- Center Branding -->
-      <text x="400" y="260" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display'" font-size="26" font-weight="700" fill="#ffffff" text-anchor="middle">Ultra Retina XDR</text>
-      <text x="400" y="290" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text'" font-size="14" fill="#38bdf8" text-anchor="middle">M4 Chip • Tandem OLED</text>
+      <rect x="160" y="75" width="280" height="340" rx="22" fill="#1c1d21" stroke="#38383c" stroke-width="2"/>
       
-      <text x="400" y="515" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display'" font-size="20" font-weight="600" fill="#f4f4f5" text-anchor="middle">${title}</text>
-      <text x="400" y="540" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text'" font-size="13" fill="#22c55e" text-anchor="middle">✓ Apple Pencil Pro Ready • Razor Thin 5.1mm</text>
+      <!-- Screen Display -->
+      <rect x="170" y="85" width="260" height="320" rx="14" fill="#0a0a0c"/>
+
+      <!-- Display Visual -->
+      <text x="300" y="235" font-family="-apple-system, 'SF Pro Display', sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">Ultra Retina XDR</text>
+      <text x="300" y="265" font-family="-apple-system, 'SF Pro Text', sans-serif" font-size="14" font-weight="400" fill="#38bdf8" text-anchor="middle">M4 Chip • Tandem OLED</text>
+      <text x="300" y="295" font-family="-apple-system, 'SF Pro Text', sans-serif" font-size="12" font-weight="400" fill="#71717a" text-anchor="middle">Thinnest Apple Product • 5.1 mm</text>
     </svg>
   `);
 }
 
 function watchSvg(title: string, color: string): string {
   return createSvgBase64(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
-      <defs>
-        <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#141416"/>
-          <stop offset="100%" stop-color="#0a0a0c"/>
-        </linearGradient>
-      </defs>
-      <rect width="800" height="600" fill="url(#bg)"/>
-      
-      <!-- Watch Band Top/Bottom -->
-      <rect x="350" y="60" width="100" height="120" rx="10" fill="#ea580c"/>
-      <rect x="350" y="380" width="100" height="120" rx="10" fill="#ea580c"/>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+      <!-- Contact Shadow -->
+      <ellipse cx="250" cy="430" rx="100" ry="12" fill="rgba(0,0,0,0.22)"/>
+
+      <!-- Band Top & Bottom -->
+      <path d="M 200 40 L 300 40 L 290 140 L 210 140 Z" fill="#f97316"/>
+      <path d="M 210 350 L 290 350 L 300 440 L 200 440 Z" fill="#f97316"/>
 
       <!-- Titanium Case -->
-      <rect x="300" y="140" width="200" height="260" rx="48" fill="#27272a" stroke="${color}" stroke-width="4"/>
+      <rect x="165" y="130" width="170" height="230" rx="42" fill="#2d2d30" stroke="#71717a" stroke-width="3"/>
       <!-- Screen -->
-      <rect x="316" y="156" width="168" height="228" rx="36" fill="#000000"/>
+      <rect x="178" y="144" width="144" height="202" rx="32" fill="#000000"/>
       <!-- Digital Crown -->
-      <rect x="498" y="180" width="12" height="48" rx="4" fill="#71717a"/>
-      <!-- Action Button Orange -->
-      <rect x="290" y="210" width="12" height="40" rx="4" fill="#ea580c"/>
+      <rect x="335" y="165" width="12" height="42" rx="4" fill="#a1a1aa"/>
+      <!-- Orange Action Button -->
+      <rect x="153" y="185" width="12" height="38" rx="4" fill="#f97316"/>
 
       <!-- Dial UI -->
-      <text x="400" y="250" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display'" font-size="44" font-weight="700" fill="#ea580c" text-anchor="middle">09:41</text>
-      <text x="400" y="285" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text'" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">3,000 NITS</text>
-      <text x="400" y="310" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text'" font-size="11" fill="#a1a1aa" text-anchor="middle">Sapphire Crystal • 100m Water</text>
-
-      <text x="400" y="535" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display'" font-size="20" font-weight="600" fill="#f4f4f5" text-anchor="middle">${title}</text>
-      <text x="400" y="560" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text'" font-size="13" fill="#22c55e" text-anchor="middle">✓ Rugged Titanium • Precision Dual GPS</text>
+      <text x="250" y="235" font-family="-apple-system, 'SF Pro Display', sans-serif" font-size="44" font-weight="600" fill="#f97316" text-anchor="middle">09:41</text>
+      <text x="250" y="270" font-family="-apple-system, 'SF Pro Text', sans-serif" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">3,000 NITS</text>
+      <text x="250" y="295" font-family="-apple-system, 'SF Pro Text', sans-serif" font-size="11" font-weight="400" fill="#a1a1aa" text-anchor="middle">49mm Titanium</text>
     </svg>
   `);
 }
 
 function airpodsSvg(title: string): string {
   return createSvgBase64(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
-      <defs>
-        <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#141416"/>
-          <stop offset="100%" stop-color="#0a0a0c"/>
-        </linearGradient>
-      </defs>
-      <rect width="800" height="600" fill="url(#bg)"/>
-      
-      <!-- MagSafe Case -->
-      <rect x="310" y="160" width="180" height="230" rx="60" fill="#f4f4f5" stroke="#e4e4e7" stroke-width="2"/>
-      <!-- Lid seam -->
-      <line x1="310" y1="230" x2="490" y2="230" stroke="#d4d4d8" stroke-width="1.5"/>
-      <!-- LED Indicator -->
-      <circle cx="400" cy="270" r="3.5" fill="#22c55e"/>
-      
-      <!-- Status Text -->
-      <text x="400" y="340" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display'" font-size="15" font-weight="600" fill="#18181b" text-anchor="middle">H2 Audio Processor</text>
-      <text x="400" y="362" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text'" font-size="11" fill="#71717a" text-anchor="middle">2x Active Noise Cancellation • USB-C</text>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+      <!-- Shadow -->
+      <ellipse cx="250" cy="380" rx="100" ry="12" fill="rgba(0,0,0,0.18)"/>
 
-      <text x="400" y="505" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display'" font-size="20" font-weight="600" fill="#f4f4f5" text-anchor="middle">${title}</text>
-      <text x="400" y="530" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text'" font-size="13" fill="#22c55e" text-anchor="middle">✓ Personalized Spatial Audio • MagSafe Case</text>
+      <!-- MagSafe Case Body -->
+      <rect x="170" y="160" width="160" height="200" rx="55" fill="#ffffff" stroke="#e5e5ea" stroke-width="1.5"/>
+      <!-- Lid Seam -->
+      <line x1="170" y1="225" x2="330" y2="225" stroke="#d1d1d6" stroke-width="1"/>
+      <!-- Status LED -->
+      <circle cx="250" cy="260" r="3" fill="#34c759"/>
+      
+      <text x="250" y="315" font-family="-apple-system, 'SF Pro Text', sans-serif" font-size="12" font-weight="600" fill="#1d1d1f" text-anchor="middle">H2 Chip</text>
+      <text x="250" y="335" font-family="-apple-system, 'SF Pro Text', sans-serif" font-size="10" font-weight="400" fill="#86868b" text-anchor="middle">Active Noise Cancellation</text>
     </svg>
   `);
 }
 
 async function main() {
-  console.log('Seeding PostgreSQL 18 for Salem Group Apple Storefront & Admin...');
+  console.log('Seeding PostgreSQL 18 with Apple Design System compliant assets...');
 
   // Clean existing tables in order
   await prisma.analyticsEvent.deleteMany({});
@@ -213,8 +177,8 @@ async function main() {
     data: {
       key: 'general',
       value: {
-        storeName: 'Salem Group - Apple Reseller',
-        tagline: 'Authorized Premium Apple Reseller & Certified Pre-Owned Specialists',
+        storeName: 'Salem Group',
+        tagline: 'Authorized Apple Reseller & Certified Pre-Owned Specialists',
         address: 'Building 14, Abbas El Akkad, Nasr City, Cairo, Egypt',
         phone: '+20 100 234 5678',
         whatsapp: '+20 100 234 5678',
@@ -222,7 +186,7 @@ async function main() {
         usdRate: 49.5,
         paymentPolicy: 'Cash On Delivery (COD) with full device inspection before payment',
         deliveryEstimate: '24 to 48 Hours Express Delivery Across Egypt',
-        warrantyTerms: '1-Year Salem Comprehensive Warranty on Sealed Products, 6-Month Warranty on Certified Pre-Owned',
+        warrantyTerms: '1-Year Salem Comprehensive Warranty on Sealed Products, 6-Month on Certified Pre-Owned',
       },
     },
   });
@@ -230,14 +194,14 @@ async function main() {
   // 2. Seed Products
   const productsData = [
     {
-      title: 'MacBook Pro 16" M3 Max (36GB / 1TB)',
+      title: 'MacBook Pro 16" M3 Max',
       slug: 'macbook-pro-16-m3-max',
       category: 'mac',
       basePrice: 168000,
       salePrice: 159900,
       condition: 'NEW_SEALED',
       batteryHealth: 100,
-      description: 'The ultimate pro laptop. Powered by M3 Max with a 14-core CPU, 30-core GPU, and 36GB unified memory for heavy rendering, 8K video, and local LLM workflows.',
+      description: 'Mind-blowing. Head-turning. Powered by M3 Max with a 14-core CPU, 30-core GPU, and 36GB unified memory.',
       specs: {
         chip: 'Apple M3 Max (14-Core CPU, 30-Core GPU)',
         memory: '36GB Unified Memory',
@@ -248,7 +212,7 @@ async function main() {
       },
       warrantyInfo: 'Official Apple 1-Year International Warranty + Salem On-Site Service',
       images: [
-        macbookSvg('MacBook Pro 16" M3 Max', '#3b3b40', 'M3 Max'),
+        macbookSvg('MacBook Pro 16" M3 Max', '#1f1f23', 'M3 Max'),
       ],
       isFeatured: true,
       stock: 4,
@@ -258,21 +222,21 @@ async function main() {
       ],
     },
     {
-      title: 'MacBook Air 13" M3 (16GB / 512GB)',
+      title: 'MacBook Air 13" M3',
       slug: 'macbook-air-13-m3',
       category: 'mac',
       basePrice: 72000,
       salePrice: 68500,
       condition: 'NEW_SEALED',
       batteryHealth: 100,
-      description: 'Lean. Mean. M3 machine. Incredibly thin, fanless quiet design with up to 18 hours of battery life and support for dual external displays.',
+      description: 'Lean. Mean. M3 machine. Incredibly thin, fanless quiet design with up to 18 hours of battery life.',
       specs: {
         chip: 'Apple M3 (8-Core CPU, 10-Core GPU)',
         memory: '16GB Unified Memory',
         storage: '512GB SSD',
         display: '13.6-inch Liquid Retina display (500 nits, True Tone)',
         ports: '2x Thunderbolt / USB 4, MagSafe 3, 3.5mm Headphone Jack',
-        weight: '1.24 kg (2.7 pounds)',
+        weight: '1.24 kg',
       },
       warrantyInfo: '1-Year Official Apple Warranty with Salem Tech Support',
       images: [
@@ -286,14 +250,14 @@ async function main() {
       ],
     },
     {
-      title: 'MacBook Pro 14" M2 Pro (Salem Certified Pre-Owned)',
+      title: 'MacBook Pro 14" M2 Pro',
       slug: 'macbook-pro-14-m2-pro-preowned',
       category: 'mac',
       basePrice: 62000,
       salePrice: 58000,
       condition: 'CERTIFIED_PRE_OWNED',
       batteryHealth: 94,
-      description: 'Tested and verified by Salem technicians through a 36-point hardware inspection. Flawless Grade A+ chassis, 94% original battery health, with authentic Apple charger.',
+      description: 'Salem Certified Pre-Owned. Tested through a 36-point inspection. Grade A+ chassis, 94% original battery health.',
       specs: {
         chip: 'Apple M2 Pro (10-Core CPU, 16-Core GPU)',
         memory: '16GB Unified Memory',
@@ -304,7 +268,7 @@ async function main() {
       },
       warrantyInfo: '6-Month Salem Full Hardware Replacement Warranty',
       images: [
-        macbookSvg('MacBook Pro 14" M2 Pro (Grade A+)', '#94a3b8', 'M2 Pro Pre-Owned'),
+        macbookSvg('MacBook Pro 14" M2 Pro', '#71717a', 'M2 Pro Pre-Owned'),
       ],
       isFeatured: false,
       stock: 2,
@@ -314,24 +278,23 @@ async function main() {
       ],
     },
     {
-      title: 'iPhone 16 Pro (Desert Titanium)',
+      title: 'iPhone 16 Pro',
       slug: 'iphone-16-pro-desert-titanium',
       category: 'iphone',
       basePrice: 64000,
       salePrice: 61900,
       condition: 'NEW_SEALED',
       batteryHealth: 100,
-      description: 'Forged in titanium with the breakthrough A18 Pro chip, dedicated Camera Control button, and 4K 120 fps Dolby Vision recording.',
+      description: 'Hello, Apple Intelligence. Forged in titanium with the breakthrough A18 Pro chip and Camera Control.',
       specs: {
         chip: 'A18 Pro chip with 6-core GPU',
         camera: '48MP Fusion, 48MP Ultra Wide, 12MP 5x Telephoto',
         display: '6.3-inch Super Retina XDR with ProMotion 120Hz',
         material: 'Grade 5 Titanium frame with textured matte glass',
-        features: 'Camera Control button, Action button, USB-C 3.0',
       },
       warrantyInfo: 'Brand New Sealed • 1-Year Apple International Warranty',
       images: [
-        iphoneSvg('iPhone 16 Pro', '#c7b198', 'Desert Titanium • A18 Pro'),
+        iphoneSvg('iPhone 16 Pro', '#c7b198', 'Desert Titanium'),
       ],
       isFeatured: true,
       stock: 6,
@@ -342,23 +305,22 @@ async function main() {
       ],
     },
     {
-      title: 'iPhone 16 Pro Max (Natural Titanium)',
+      title: 'iPhone 16 Pro Max',
       slug: 'iphone-16-pro-max-natural-titanium',
       category: 'iphone',
       basePrice: 76000,
       salePrice: 73500,
       condition: 'NEW_SEALED',
       batteryHealth: 100,
-      description: 'The biggest, most capable iPhone yet. Incredible 6.9-inch borderless Super Retina XDR display, up to 33 hours video playback, and 5x optical zoom on all models.',
+      description: 'The ultimate iPhone. 6.9-inch Super Retina XDR display, up to 33 hours video playback, and 5x optical zoom.',
       specs: {
-        chip: 'A18 Pro Chip (Industry-leading single-core speed)',
+        chip: 'A18 Pro Chip',
         camera: 'Triple Lens 48MP Pro System with 5x Telephoto',
         display: '6.9-inch Super Retina XDR (Thinnest borders ever)',
-        battery: 'Largest battery ever in an iPhone',
       },
       warrantyInfo: 'Sealed Box • 1-Year Official Warranty with Salem Support',
       images: [
-        iphoneSvg('iPhone 16 Pro Max', '#9a948c', 'Natural Titanium • 6.9" Display'),
+        iphoneSvg('iPhone 16 Pro Max', '#9a948c', 'Natural Titanium'),
       ],
       isFeatured: true,
       stock: 5,
@@ -368,24 +330,23 @@ async function main() {
       ],
     },
     {
-      title: 'iPhone 15 Pro (Open Box - 100% Battery)',
+      title: 'iPhone 15 Pro',
       slug: 'iphone-15-pro-open-box',
       category: 'iphone',
       basePrice: 48000,
       salePrice: 44900,
       condition: 'OPEN_BOX',
       batteryHealth: 100,
-      description: 'Customer unboxed unit with zero signs of use. 100% original battery capacity, 0 charge cycles. Includes original braided USB-C cable and box.',
+      description: 'Open box customs inspection unit. 100% original battery capacity, 0 charge cycles. Includes original cable and box.',
       specs: {
         chip: 'A17 Pro Chip',
         camera: '48MP Main with 3x Telephoto',
         display: '6.1-inch ProMotion 120Hz',
-        conditionNotes: 'Box opened for customs inspection. Never activated.',
         serialNumber: 'F2LK9992MX',
       },
-      warrantyInfo: 'Full 10-Month Remaining Apple Warranty + Salem 6-Month Guarantee',
+      warrantyInfo: '10-Month Remaining Apple Warranty + Salem 6-Month Guarantee',
       images: [
-        iphoneSvg('iPhone 15 Pro (Open Box)', '#3f3f46', '100% Battery Health • Zero Cycles'),
+        iphoneSvg('iPhone 15 Pro', '#3f3f46', 'Black Titanium'),
       ],
       isFeatured: false,
       stock: 3,
@@ -395,23 +356,22 @@ async function main() {
       ],
     },
     {
-      title: 'iPad Pro 13" M4 (Tandem OLED)',
+      title: 'iPad Pro 13" M4',
       slug: 'ipad-pro-13-m4',
       category: 'ipad',
       basePrice: 65000,
       salePrice: 62000,
       condition: 'NEW_SEALED',
       batteryHealth: 100,
-      description: 'Thinnovation at its finest. Revolutionary Tandem OLED Ultra Retina XDR display driven by the groundbreaking M4 chip in an unbelievable 5.1mm thin profile.',
+      description: 'Unbelievably thin. Incredibly powerful. Tandem OLED Ultra Retina XDR display with M4 chip.',
       specs: {
-        chip: 'Apple M4 Chip with 10-Core GPU & Hardware Ray Tracing',
-        display: '13-inch Ultra Retina XDR (Tandem OLED, 1000 nits full screen)',
+        chip: 'Apple M4 Chip with 10-Core GPU',
+        display: '13-inch Ultra Retina XDR (Tandem OLED)',
         thickness: '5.1mm - Thinnest Apple device ever made',
-        accessories: 'Compatible with Apple Pencil Pro & Magic Keyboard',
       },
       warrantyInfo: '1-Year Official Apple Warranty',
       images: [
-        ipadSvg('iPad Pro 13" M4', '#0284c7'),
+        ipadSvg('iPad Pro 13" M4', '#18181b'),
       ],
       isFeatured: true,
       stock: 3,
@@ -421,23 +381,22 @@ async function main() {
       ],
     },
     {
-      title: 'Apple Watch Ultra 2 (Titanium 49mm)',
+      title: 'Apple Watch Ultra 2',
       slug: 'apple-watch-ultra-2',
       category: 'watch',
       basePrice: 42000,
       salePrice: 39500,
       condition: 'NEW_SEALED',
       batteryHealth: 100,
-      description: 'The most capable and rugged Apple Watch. 49mm aerospace-grade titanium case, dual-frequency GPS, customizable Action button, and 3000 nits display.',
+      description: 'The ultimate sports and adventure watch. 49mm titanium case, dual-frequency GPS, and 3000 nits display.',
       specs: {
         caseSize: '49mm Aerospace Titanium Case',
-        display: 'Always-On Retina display with up to 3,000 nits peak brightness',
-        battery: 'Up to 36 hours normal use (72 hours Low Power Mode)',
-        waterResistance: '100m water resistant, certified EN13319 for diving',
+        display: 'Always-On Retina display with up to 3,000 nits',
+        battery: 'Up to 36 hours normal use',
       },
       warrantyInfo: '1-Year International Warranty',
       images: [
-        watchSvg('Apple Watch Ultra 2', '#ea580c'),
+        watchSvg('Apple Watch Ultra 2', '#27272a'),
       ],
       isFeatured: true,
       stock: 4,
@@ -447,23 +406,22 @@ async function main() {
       ],
     },
     {
-      title: 'AirPods Pro 2 (USB-C MagSafe Case)',
+      title: 'AirPods Pro 2 (USB-C)',
       slug: 'airpods-pro-2-usbc',
       category: 'airpods',
       basePrice: 13500,
       salePrice: 11999,
       condition: 'NEW_SEALED',
       batteryHealth: 100,
-      description: 'Up to 2x more Active Noise Cancellation, Adaptive Audio that seamlessly tunes noise control, Conversation Awareness, and USB-C MagSafe charging case.',
+      description: 'Up to 2x more Active Noise Cancellation. Adaptive Audio and USB-C MagSafe charging case.',
       specs: {
-        chip: 'Apple H2 Headphone Chip, U1 Chip in Charging Case',
+        chip: 'Apple H2 Headphone Chip',
         audio: 'Personalized Spatial Audio with dynamic head tracking',
-        charging: 'USB-C, MagSafe, and Apple Watch charger compatible',
-        resistance: 'IP54 dust, sweat, and water resistant',
+        charging: 'USB-C MagSafe Case',
       },
       warrantyInfo: '1-Year Apple Warranty',
       images: [
-        airpodsSvg('AirPods Pro 2 (USB-C)'),
+        airpodsSvg('AirPods Pro 2'),
       ],
       isFeatured: true,
       stock: 12,
@@ -489,20 +447,19 @@ async function main() {
     }
   }
 
-  // 3. Seed Sample COD Orders
+  // 3. Seed Sample Orders
   await prisma.order.create({
     data: {
       orderNumber: 'SLM-1042',
       customerName: 'Mohamed Tarek',
       customerPhone: '+20 111 456 7890',
-      customerEmail: 'mohamed.tarek@example.com',
       shippingAddress: 'Villa 12, District 5, New Cairo',
       city: 'Cairo',
       paymentMethod: 'CASH_ON_DELIVERY',
       status: 'PROCESSING',
       items: [
         {
-          title: 'MacBook Pro 16" M3 Max (36GB / 1TB)',
+          title: 'MacBook Pro 16" M3 Max',
           variant: 'Space Black / 1TB',
           price: 159900,
           quantity: 1,
@@ -521,34 +478,27 @@ async function main() {
       orderNumber: 'SLM-1043',
       customerName: 'Omar Hassan',
       customerPhone: '+20 122 789 1234',
-      customerEmail: 'omar.h@example.com',
       shippingAddress: 'Apt 4B, Loran, Alexandria',
       city: 'Alexandria',
       paymentMethod: 'CASH_ON_DELIVERY',
       status: 'SHIPPED',
       items: [
         {
-          title: 'iPhone 16 Pro (Desert Titanium)',
+          title: 'iPhone 16 Pro',
           variant: 'Desert Titanium / 256GB',
           price: 66900,
           quantity: 1,
         },
-        {
-          title: 'AirPods Pro 2 (USB-C MagSafe Case)',
-          variant: 'White / Standard',
-          price: 11999,
-          quantity: 1,
-        },
       ],
-      subtotal: 78899,
+      subtotal: 66900,
       shippingCost: 0,
-      totalAmount: 78899,
+      totalAmount: 66900,
       trafficSource: 'WhatsApp',
-      notes: 'Dispatched with express courier. Collect 78,899 EGP in cash.',
+      notes: 'Dispatched with express courier. Collect 66,900 EGP in cash.',
     },
   });
 
-  // 4. Seed Sample Trade-in Leads
+  // 4. Seed Trade-ins
   await prisma.tradeIn.create({
     data: {
       customerName: 'Karim Sherif',
@@ -564,60 +514,32 @@ async function main() {
     },
   });
 
-  await prisma.tradeIn.create({
-    data: {
-      customerName: 'Nour El-Din',
-      customerPhone: '+20 115 889 0011',
-      deviceCategory: 'Mac',
-      deviceModel: 'MacBook Pro 13" M1 16GB/512GB',
-      batteryHealth: 91,
-      physicalCondition: 'Light Scratches on bottom lid',
-      accessoriesIncluded: ['Original 67W Charger', 'Box'],
-      estimatedTradeValue: 34000,
-      desiredUpgrade: 'MacBook Pro 16" M3 Max',
-      status: 'CONTACTED',
-    },
-  });
-
-  // 5. Seed Pre-existing Analytics Events (Zero-result searches, Views, Cart, Abandonment, Traffic)
+  // 5. Seed Analytics Events
   const now = new Date();
   const sampleAnalyticsEvents = [
-    // Zero-Result Searches (Crucial for Merchant intelligence!)
     { eventType: 'SEARCH', searchQuery: 'Vision Pro 512GB', hasResults: false, sessionId: 's-101', trafficSource: 'Instagram', createdAt: new Date(now.getTime() - 1000 * 60 * 60 * 2) },
     { eventType: 'SEARCH', searchQuery: 'Mac Studio M2 Max', hasResults: false, sessionId: 's-102', trafficSource: 'Direct', createdAt: new Date(now.getTime() - 1000 * 60 * 60 * 4) },
     { eventType: 'SEARCH', searchQuery: 'HomePod mini Space Gray', hasResults: false, sessionId: 's-103', trafficSource: 'WhatsApp', createdAt: new Date(now.getTime() - 1000 * 60 * 60 * 5) },
     { eventType: 'SEARCH', searchQuery: 'Magic Keyboard with Touch ID', hasResults: false, sessionId: 's-104', trafficSource: 'Google', createdAt: new Date(now.getTime() - 1000 * 60 * 60 * 7) },
     { eventType: 'SEARCH', searchQuery: 'Vision Pro', hasResults: false, sessionId: 's-105', trafficSource: 'TikTok', createdAt: new Date(now.getTime() - 1000 * 60 * 60 * 9) },
-    { eventType: 'SEARCH', searchQuery: 'Apple Display Studio', hasResults: false, sessionId: 's-106', trafficSource: 'Instagram', createdAt: new Date(now.getTime() - 1000 * 60 * 60 * 12) },
 
-    // Successful Searches
     { eventType: 'SEARCH', searchQuery: 'MacBook Pro M3', hasResults: true, sessionId: 's-201', trafficSource: 'Direct', createdAt: new Date(now.getTime() - 1000 * 60 * 60 * 3) },
     { eventType: 'SEARCH', searchQuery: 'iPhone 16 Pro', hasResults: true, sessionId: 's-202', trafficSource: 'WhatsApp', createdAt: new Date(now.getTime() - 1000 * 60 * 60 * 6) },
-    { eventType: 'SEARCH', searchQuery: 'Pre-owned MacBook', hasResults: true, sessionId: 's-203', trafficSource: 'Instagram', createdAt: new Date(now.getTime() - 1000 * 60 * 60 * 8) },
 
-    // Funnel events (Views, Add to Cart, Initiated Checkout, Abandonment)
-    { eventType: 'PRODUCT_VIEW', productTitle: 'MacBook Pro 16" M3 Max (36GB / 1TB)', trafficSource: 'Instagram', sessionId: 's-301' },
-    { eventType: 'PRODUCT_VIEW', productTitle: 'MacBook Pro 16" M3 Max (36GB / 1TB)', trafficSource: 'WhatsApp', sessionId: 's-302' },
-    { eventType: 'PRODUCT_VIEW', productTitle: 'iPhone 16 Pro (Desert Titanium)', trafficSource: 'Direct', sessionId: 's-303' },
-    { eventType: 'PRODUCT_VIEW', productTitle: 'iPhone 16 Pro (Desert Titanium)', trafficSource: 'Instagram', sessionId: 's-304' },
-    { eventType: 'PRODUCT_VIEW', productTitle: 'iPhone 16 Pro Max (Natural Titanium)', trafficSource: 'TikTok', sessionId: 's-305' },
-    { eventType: 'PRODUCT_VIEW', productTitle: 'Apple Watch Ultra 2 (Titanium 49mm)', trafficSource: 'Facebook', sessionId: 's-306' },
-    { eventType: 'PRODUCT_VIEW', productTitle: 'AirPods Pro 2 (USB-C MagSafe Case)', trafficSource: 'Google', sessionId: 's-307' },
+    { eventType: 'PRODUCT_VIEW', productTitle: 'MacBook Pro 16" M3 Max', trafficSource: 'Instagram', sessionId: 's-301' },
+    { eventType: 'PRODUCT_VIEW', productTitle: 'iPhone 16 Pro', trafficSource: 'Direct', sessionId: 's-303' },
+    { eventType: 'PRODUCT_VIEW', productTitle: 'AirPods Pro 2 (USB-C)', trafficSource: 'Google', sessionId: 's-307' },
 
-    { eventType: 'ADD_TO_CART', productTitle: 'MacBook Pro 16" M3 Max (36GB / 1TB)', trafficSource: 'Instagram', sessionId: 's-301', metadata: { price: 159900 } },
-    { eventType: 'ADD_TO_CART', productTitle: 'iPhone 16 Pro (Desert Titanium)', trafficSource: 'WhatsApp', sessionId: 's-302', metadata: { price: 61900 } },
-    { eventType: 'ADD_TO_CART', productTitle: 'AirPods Pro 2 (USB-C MagSafe Case)', trafficSource: 'Google', sessionId: 's-307', metadata: { price: 11999 } },
+    { eventType: 'ADD_TO_CART', productTitle: 'MacBook Pro 16" M3 Max', trafficSource: 'Instagram', sessionId: 's-301', metadata: { price: 159900 } },
+    { eventType: 'ADD_TO_CART', productTitle: 'iPhone 16 Pro', trafficSource: 'WhatsApp', sessionId: 's-302', metadata: { price: 61900 } },
 
     { eventType: 'CHECKOUT_INITIATED', trafficSource: 'Instagram', sessionId: 's-301', metadata: { cartValue: 159900 } },
     { eventType: 'CHECKOUT_INITIATED', trafficSource: 'WhatsApp', sessionId: 's-302', metadata: { cartValue: 61900 } },
-    { eventType: 'CHECKOUT_INITIATED', trafficSource: 'Google', sessionId: 's-307', metadata: { cartValue: 11999 } },
 
-    // Abandoned Checkout (e.g. customer dropped off before entering phone)
-    { eventType: 'CHECKOUT_ABANDONED', trafficSource: 'Google', sessionId: 's-307', metadata: { cartValue: 11999, droppedAt: 'shipping_address_step', itemsCount: 1 } },
+    { eventType: 'CHECKOUT_ABANDONED', trafficSource: 'Google', sessionId: 's-307', metadata: { cartValue: 11999, droppedAt: 'address_step', itemsCount: 1 } },
 
-    // Completed COD Orders
     { eventType: 'CHECKOUT_COMPLETED', trafficSource: 'Instagram', sessionId: 's-301', metadata: { orderNumber: 'SLM-1042', amount: 159900, method: 'COD' } },
-    { eventType: 'CHECKOUT_COMPLETED', trafficSource: 'WhatsApp', sessionId: 's-302', metadata: { orderNumber: 'SLM-1043', amount: 78899, method: 'COD' } },
+    { eventType: 'CHECKOUT_COMPLETED', trafficSource: 'WhatsApp', sessionId: 's-302', metadata: { orderNumber: 'SLM-1043', amount: 66900, method: 'COD' } },
   ];
 
   for (const event of sampleAnalyticsEvents) {
@@ -629,7 +551,7 @@ async function main() {
     });
   }
 
-  console.log('Seed completed successfully with authentic Apple catalog and analytics!');
+  console.log('Database seeded with DESIGN.md compliant Apple catalog!');
 }
 
 main()

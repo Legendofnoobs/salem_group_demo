@@ -34,35 +34,35 @@ export function MainController({
   const [viewMode, setViewMode] = useState<'storefront' | 'admin'>('storefront');
 
   return (
-    <div className="relative min-h-screen bg-black">
+    <div className="relative min-h-screen bg-[#ffffff] text-[#1d1d1f]">
       {/* Floating Demo Mode Switcher Bar */}
-      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 bg-zinc-900/90 backdrop-blur-md border border-white/20 rounded-full px-3 py-1.5 shadow-2xl flex items-center gap-2">
-        <span className="text-[10px] text-zinc-400 font-semibold uppercase tracking-wider pl-1 hidden sm:inline">
-          Demo Mode:
+      <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-[#1d1d1f]/90 backdrop-blur-md border border-white/10 rounded-full p-1.5 flex items-center gap-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.25)]">
+        <span className="text-[11px] text-[#86868b] font-medium uppercase tracking-wider px-2 hidden sm:inline">
+          Demo View:
         </span>
 
         <button
           onClick={() => setViewMode('storefront')}
-          className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition-all ${
+          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[13px] font-normal transition-all active:scale-[0.95] cursor-pointer ${
             viewMode === 'storefront'
-              ? 'bg-white text-black shadow-md'
-              : 'text-zinc-400 hover:text-white'
+              ? 'bg-[#ffffff] text-[#1d1d1f]'
+              : 'text-[#a1a1a6] hover:text-[#ffffff]'
           }`}
         >
-          <Store className="w-3.5 h-3.5 text-emerald-500" />
-          <span>Customer Store</span>
+          <Store className="w-3.5 h-3.5" />
+          <span>Customer Storefront</span>
         </button>
 
         <button
           onClick={() => setViewMode('admin')}
-          className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition-all ${
+          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[13px] font-normal transition-all active:scale-[0.95] cursor-pointer ${
             viewMode === 'admin'
-              ? 'bg-blue-600 text-white shadow-md'
-              : 'text-zinc-400 hover:text-white'
+              ? 'bg-[#0066cc] text-[#ffffff]'
+              : 'text-[#a1a1a6] hover:text-[#ffffff]'
           }`}
         >
-          <LayoutDashboard className="w-3.5 h-3.5 text-blue-300" />
-          <span>Merchant Admin & Analytics</span>
+          <LayoutDashboard className="w-3.5 h-3.5" />
+          <span>Merchant Dashboard</span>
         </button>
       </div>
 

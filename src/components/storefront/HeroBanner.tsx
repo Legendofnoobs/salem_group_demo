@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { ShieldCheck, Truck, RotateCcw, ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react';
 
 interface HeroBannerProps {
   onScrollToCatalog: () => void;
@@ -10,90 +9,86 @@ interface HeroBannerProps {
 
 export function HeroBanner({ onScrollToCatalog, onOpenTradeIn }: HeroBannerProps) {
   return (
-    <section className="relative overflow-hidden pt-12 pb-16 lg:pt-16 lg:pb-24 border-b border-white/10 bg-gradient-to-b from-black via-zinc-950 to-black">
-      {/* Background Radial Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-r from-blue-600/15 via-purple-600/10 to-amber-500/10 blur-[120px] rounded-full pointer-events-none" />
+    <div className="w-full">
+      {/* Tile 1: product-tile-dark (#272729 Near-Black Canvas) */}
+      <section className="bg-[#272729] text-[#ffffff] pt-16 pb-12 sm:pt-20 sm:pb-16 px-4 text-center overflow-hidden border-b border-[#333336]">
+        <div className="max-w-[1024px] mx-auto">
+          {/* Tile Headline (hero-display: 56px / 600 / line-height 1.07 / letter-spacing -0.28px) */}
+          <h1 className="text-[40px] sm:text-[56px] font-semibold tracking-[-0.28px] leading-[1.07] text-[#ffffff] mb-2 font-display">
+            MacBook Pro
+          </h1>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-        {/* Top Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/90 border border-white/15 text-xs text-zinc-300 mb-6 shadow-inner">
-          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-          <span>Salem Group Exclusive Apple Inventory</span>
-          <span className="text-zinc-500">•</span>
-          <span className="text-emerald-400 font-medium">New Sealed & Certified Pre-Owned</span>
-        </div>
+          {/* Subhead (lead: 28px / 400 / line-height 1.14) */}
+          <p className="text-[20px] sm:text-[28px] font-normal text-[#cccccc] tracking-[0.196px] leading-[1.14] mb-6">
+            Mind-blowing. Head-turning.
+          </p>
 
-        {/* Hero Title */}
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6">
-          The Pro Apple Experience. <br className="hidden sm:inline" />
-          <span className="bg-gradient-to-r from-white via-zinc-300 to-zinc-500 bg-clip-text text-transparent">
-            Delivered to Your Door.
-          </span>
-        </h1>
-
-        {/* Subtitle */}
-        <p className="max-w-2xl mx-auto text-base sm:text-lg text-zinc-400 mb-8 leading-relaxed font-normal">
-          Genuine Apple devices with Salem Group inspection guarantee. Choose from Brand New Sealed units or Certified Pre-Owned with 90%+ battery health and serial number verification.
-        </p>
-
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-12">
-          <button
-            onClick={onScrollToCatalog}
-            className="w-full sm:w-auto px-7 py-3 rounded-full bg-white text-black font-semibold text-sm hover:bg-zinc-200 transition-all flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-[0.98]"
-          >
-            <span>Browse Products</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-
-          <button
-            onClick={onOpenTradeIn}
-            className="w-full sm:w-auto px-7 py-3 rounded-full bg-zinc-900 border border-white/20 text-white font-medium text-sm hover:bg-zinc-800 transition-all flex items-center justify-center gap-2 hover:border-zinc-500"
-          >
-            <RotateCcw className="w-4 h-4 text-emerald-400" />
-            <span>Estimate Trade-In Value</span>
-          </button>
-        </div>
-
-        {/* Trust Guarantees Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto pt-6 border-t border-white/10 text-left">
-          <div className="flex items-start gap-3 p-3.5 rounded-xl bg-zinc-900/40 border border-white/5">
-            <div className="w-9 h-9 rounded-lg bg-emerald-950/60 border border-emerald-500/30 flex items-center justify-center flex-shrink-0 text-emerald-400">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-xs font-semibold text-white">Cash On Delivery (COD)</h4>
-              <p className="text-[11px] text-zinc-400 mt-0.5">
-                Inspect serial number and unbox before paying courier.
-              </p>
-            </div>
+          {/* Dual Action Buttons (Action Blue Pill + Ghost Pill per DESIGN.md) */}
+          <div className="flex items-center justify-center gap-3.5 mb-10">
+            <button
+              onClick={onScrollToCatalog}
+              className="px-[22px] py-[11px] rounded-[9999px] bg-[#0066cc] text-[#ffffff] text-[17px] font-normal hover:bg-[#0071e3] apple-btn-active transition-all"
+            >
+              Order with COD
+            </button>
+            <button
+              onClick={onOpenTradeIn}
+              className="px-[22px] py-[11px] rounded-[9999px] bg-transparent text-[#2997ff] border border-[#2997ff] text-[17px] font-normal hover:bg-[#2997ff]/10 apple-btn-active transition-all"
+            >
+              Trade In Credit
+            </button>
           </div>
 
-          <div className="flex items-start gap-3 p-3.5 rounded-xl bg-zinc-900/40 border border-white/5">
-            <div className="w-9 h-9 rounded-lg bg-blue-950/60 border border-blue-500/30 flex items-center justify-center flex-shrink-0 text-blue-400">
-              <Truck className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-xs font-semibold text-white">Express Egypt Delivery</h4>
-              <p className="text-[11px] text-zinc-400 mt-0.5">
-                Cairo & Giza in 24 hours. Alexandria & governorates in 48 hours.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-3 p-3.5 rounded-xl bg-zinc-900/40 border border-white/5">
-            <div className="w-9 h-9 rounded-lg bg-purple-950/60 border border-purple-500/30 flex items-center justify-center flex-shrink-0 text-purple-400">
-              <CheckCircle2 className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-xs font-semibold text-white">1-Year Salem Warranty</h4>
-              <p className="text-[11px] text-zinc-400 mt-0.5">
-                Direct store warranty and genuine replacement guarantee.
-              </p>
-            </div>
+          {/* Product render with signature Apple drop-shadow */}
+          <div className="max-w-[720px] mx-auto flex items-center justify-center">
+            <img
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNTAwIiB3aWR0aD0iODAwIiBoZWlnaHQ9IjUwMCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJtZXRhbERlY2siIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMWYxZjIzIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMTQxNDE2Ii8+PC9saW5lYXJHcmFkaWVudD48bGluZWFyR3JhZGllbnQgaWQ9InNjcmVlbkRpc3BsYXkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMGEwYTBjIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMTgxODFjIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PGVsbGlwc2UgY3g9IjQwMCIgY3k9IjQxMCIgcng9IjI4MCIgcnk9IjE2IiBmaWxsPSJyZ2JhKDAsMCwwLDAuMjIpIi8+PHJlY3QgeD0iMTkwIiB5PSI3MCIgd2lkdGg9IjQyMCIgaGVpZ2h0PSIyNzAiIHJ4PSIxMiIgZmlsbD0iIzBkMGQwZiIgc3Ryb2tlPSIjMzMzMzM2IiBzdHJva2Utd2lkdGg9IjIiLz48cmVjdCB4PSIyMDIiIHk9IjgyIiB3aWR0aD0iMzk2IiBoZWlnaHQ9IjI0NiIgcng9IjYiIGZpbGw9InVybCgjc2NyZWVuRGlzcGxheSkiLz48cGF0aCBkPSJNIDM3MiA4MiBMIDQyOCA4MiBMIDQyNCA5NCBDIDQyMiA5NyA0MTkgOTkgNDE1IDk5IEwgMzg1IDk5IEMgMzgxIDk5IDM3OCA5NyAzNzYgOTQgWiIgZmlsbD0iIzBkMGQwZiIvPjxjaXJjbGUgY3g9IjQwMCIgY3k9Ijg5IiByPSIyLjUiIGZpbGw9IiMxZjI5MzciLz48cmVjdCB4PSIyMDgiIHk9IjEwNCIgd2lkdGg9IjM4NCIgaGVpZ2h0PSIyMTgiIHJ4PSI0IiBmaWxsPSIjMTExMTE0Ii8+PHRleHQgeD0iNDAwIiB5PSIyNDAiIGZvbnQtZmFtaWx5PSItYXBwbGUtc3lzdGVtLCAnU0YgUHJvIERpc3BsYXknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI0IiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NMyBNYXg8L3RleHQ+PHRleHQgeD0iNDAwIiB5PSIyNjUiIGZvbnQtZmFtaWx5PSItYXBwbGUtc3lzdGVtLCAnU0YgUHJvIFRleHQnLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEzIiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSIjYTFhMWFhIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5MaXF1aWQgUmV0aW5hIFhEUjwvdGV4dD48cGF0aCBkPSJNIDE0MCAzNDAgTCA2NjAgMzQwIEwgNjQyIDM4OCBMIDE1OCAzODggWiIgZmlsbD0idXJsKCNtZXRhbERlY2spIiBzdHJva2U9IiMzZjNmNDYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHJlY3QgeD0iMzY0IiB5PSIzNDAiIHdpZHRoPSI3MiIgaGVpZ2h0PSI1IiByeD0iMi41IiBmaWxsPSIjMDgwODBhIi8+PHJlY3QgeD0iMTQwIiB5PSIzODQiIHdpZHRoPSI1MjAiIGhlaWdodD0iMTIiIHJ4PSI2IiBmaWxsPSIjMTgxODFiIi8+PC9zdmc+"
+              alt="MacBook Pro"
+              className="w-full h-auto object-contain apple-product-shadow"
+            />
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Tile 2: product-tile-parchment (#f5f5f7 Parchment Light Canvas) */}
+      <section className="bg-[#f5f5f7] text-[#1d1d1f] pt-16 pb-12 sm:pt-20 sm:pb-16 px-4 text-center overflow-hidden border-b border-[#e0e0e0]">
+        <div className="max-w-[1024px] mx-auto">
+          {/* Tile Headline */}
+          <h2 className="text-[40px] sm:text-[56px] font-semibold tracking-[-0.28px] leading-[1.07] text-[#1d1d1f] mb-2 font-display">
+            iPhone 16 Pro
+          </h2>
+
+          {/* Subhead */}
+          <p className="text-[20px] sm:text-[28px] font-normal text-[#1d1d1f] tracking-[0.196px] leading-[1.14] mb-6">
+            Hello, Apple Intelligence.
+          </p>
+
+          {/* Dual Action Buttons */}
+          <div className="flex items-center justify-center gap-3.5 mb-10">
+            <button
+              onClick={onScrollToCatalog}
+              className="px-[22px] py-[11px] rounded-[9999px] bg-[#0066cc] text-[#ffffff] text-[17px] font-normal hover:bg-[#0071e3] apple-btn-active transition-all"
+            >
+              Order with COD
+            </button>
+            <button
+              onClick={onOpenTradeIn}
+              className="px-[22px] py-[11px] rounded-[9999px] bg-transparent text-[#0066cc] border border-[#0066cc] text-[17px] font-normal hover:bg-[#0066cc]/10 apple-btn-active transition-all"
+            >
+              Trade In Your iPhone
+            </button>
+          </div>
+
+          {/* iPhone Product render with signature Apple drop-shadow */}
+          <div className="max-w-[340px] mx-auto flex items-center justify-center">
+            <img
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MDAgNTAwIiB3aWR0aD0iNjAwIiBoZWlnaHQ9IjUwMCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJ0aUZyYW1lIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2M3YjE5OCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzI0MjQyNiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxlbGxpcHNlIGN4PSIzMDAiIGN5PSI0MjUiIHJ4PSIxNDAiIHJ5PSIxNCIgZmlsbD0icmdiYSgwLDAsMCwwLjIyKSIvPjxyZWN0IHg9IjIwMCIgeT0iNjAiIHdpZHRoPSIyMDAiIGhlaWdodD0iMzU1IiByeD0iMzgiIGZpbGw9InVybCgjdGlGcmFtZSkiIHN0cm9rZT0iI2M3YjE5OCIgc3Ryb2tlLXdpZHRoPSIyLjUiLz48cmVjdCB4PSIyMDYiIHk9IjY2IiB3aWR0aD0iMTg4IiBoZWlnaHQ9IjM0MyIgcng9IjMyIiBmaWxsPSIjMDAwMDAwIi8+PHJlY3QgeD0iMjEwIiB5PSI3MCIgd2lkdGg9IjE4MCIgaGVpZ2h0PSIzMzUiIHJ4PSIyOCIgZmlsbD0iIzBjMGQxMCIvPjxyZWN0IHg9IjI2OCIgeT0iODAiIHdpZHRoPSI2NCIgaGVpZ2h0PSIxOCIgcng9IjkiIGZpbGw9IiMwMDAwMDAiLz48dGV4dCB4PSIzMDAiIHk9IjIxMCIgZm9udC1mYW1pbHk9Ii1hcHBsZS1zeXN0ZW0sICdTRiBQcm8gRGlzcGxheScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzYiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPjA5OjQxPC90ZXh0Pjx0ZXh0IHg9IjMwMCIgeT0iMjQwIiBmb250LWZhbWlseT0iLWFwcGxlLXN5c3RlbSwgJ1NGIFBybyBUZXh0Jywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMyIgZm9udC13ZWlnaHQ9IjQwMCIgZmlsbD0iI2ExYTFhYSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+U3VwZXIgUmV0aW5hIFhEUjwvdGV4dD48cmVjdCB4PSIyNDAiIHk9IjI4MCIgd2lkdGg9IjEyMCIgaGVpZ2h0PSIzMCIgcng9IjE1IiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDYpIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iMzAwIiB5PSIzMDAiIGZvbnQtZmFtaWx5PSItYXBwbGUtc3lzdGVtLCAnU0YgUHJvIFRleHQnLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjYzdiMTk4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5BMTggUHJvPC90ZXh0PjwvY3ZnPg=="
+              alt="iPhone 16 Pro"
+              className="w-full h-auto object-contain apple-product-shadow"
+            />
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
