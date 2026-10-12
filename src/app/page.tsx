@@ -62,11 +62,6 @@ export default async function HomePage() {
       <section className="bg-[#272729] text-[#ffffff] py-14 sm:py-20 px-4 sm:px-8 border-b border-[#333336]">
         <div className="max-w-[1240px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           <div className="lg:col-span-7 space-y-6 text-left">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-[12px] font-medium text-[#2997ff]">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Salem Group • Cairo & Giza Same-Day Dispatch</span>
-            </div>
-
             <h1 className="text-[38px] sm:text-[54px] font-semibold tracking-[-0.35px] leading-[1.06] text-[#ffffff] font-display">
               Premium Apple Hardware.<br />
               <span className="text-[#a1a1a6]">Inspected Before You Pay.</span>
@@ -76,22 +71,58 @@ export default async function HomePage() {
               Egypt&apos;s premier destination for genuine sealed Apple devices and certified pre-owned hardware. Full unboxing inspection rights with express Cash on Delivery.
             </p>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 text-[13px] text-[#e0e0e0]">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-[#2997ff] shrink-0" />
-                <span>100% Sealed Stock</span>
+            {/* 4 Core Value Guarantees directly under subtitle */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 max-w-2xl">
+              <div className="flex items-start gap-3 p-3.5 rounded-xl bg-white/5 border border-white/10">
+                <div className="w-8 h-8 rounded-lg bg-[#2997ff]/15 text-[#2997ff] flex items-center justify-center shrink-0">
+                  <ShieldCheck className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-[13px] font-semibold text-white">Inspect Before Paying</h3>
+                  <p className="text-[12px] text-[#a1a1a6] mt-0.5 leading-snug">
+                    Unbox and test your device with the courier before paying cash.
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Award className="w-4 h-4 text-[#2997ff] shrink-0" />
-                <span>1-Year Local Warranty</span>
+
+              <div className="flex items-start gap-3 p-3.5 rounded-xl bg-white/5 border border-white/10">
+                <div className="w-8 h-8 rounded-lg bg-[#2997ff]/15 text-[#2997ff] flex items-center justify-center shrink-0">
+                  <Award className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-[13px] font-semibold text-white">1-Year Egyptian Warranty</h3>
+                  <p className="text-[12px] text-[#a1a1a6] mt-0.5 leading-snug">
+                    Comprehensive local coverage &amp; immediate exchange on factory defects.
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Truck className="w-4 h-4 text-[#2997ff] shrink-0" />
-                <span>24h Express Dispatch</span>
+
+              <div className="flex items-start gap-3 p-3.5 rounded-xl bg-white/5 border border-white/10">
+                <div className="w-8 h-8 rounded-lg bg-[#2997ff]/15 text-[#2997ff] flex items-center justify-center shrink-0">
+                  <RefreshCw className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-[13px] font-semibold text-white">Instant Trade-In Credit</h3>
+                  <p className="text-[12px] text-[#a1a1a6] mt-0.5 leading-snug">
+                    Trade your existing phone or laptop for immediate store discount.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-3.5 rounded-xl bg-white/5 border border-white/10">
+                <div className="w-8 h-8 rounded-lg bg-[#2997ff]/15 text-[#2997ff] flex items-center justify-center shrink-0">
+                  <Truck className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-[13px] font-semibold text-white">24h Express Delivery</h3>
+                  <p className="text-[12px] text-[#a1a1a6] mt-0.5 leading-snug">
+                    Rapid dispatch across Cairo, Giza, Alexandria &amp; all governorates.
+                  </p>
+                </div>
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3.5 pt-4">
+            <div className="flex flex-wrap items-center gap-3.5 pt-3">
               <Link
                 href="/collections/all"
                 className="px-7 py-3.5 rounded-full bg-[#0066cc] hover:bg-[#0077ed] text-white text-[15px] font-medium apple-btn-active transition-all flex items-center gap-2 shadow-sm"
@@ -110,65 +141,20 @@ export default async function HomePage() {
           </div>
 
           <div className="lg:col-span-5 flex flex-col items-center justify-center">
-            <div className="relative w-full max-w-[440px] aspect-4/3 flex items-center justify-center">
+            <div className="relative w-full max-w-[480px] flex items-center justify-center">
               <img
-                src={realImages.mbp16_spaceblack}
+                src="/images/hero_macbook.png"
                 alt="MacBook Pro M3 Max"
-                className="w-full h-auto object-contain apple-product-shadow"
+                className="w-full h-auto object-contain drop-shadow-2xl"
               />
             </div>
-            <div className="text-center mt-3">
+            <div className="text-center mt-4">
               <span className="text-[12px] font-medium text-[#a1a1a6] block">
-                Flagship In Stock • MacBook Pro 16&quot; M3 Max (Space Black)
+                Flagship In Stock • MacBook Pro 16&quot; M3 Max
               </span>
               <span className="text-[15px] font-semibold text-white">
                 159,900 EGP <span className="text-[12px] text-emerald-400 font-normal">• Ready to Dispatch</span>
               </span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 2. Retail Guarantees Strip */}
-      <section className="bg-[#f5f5f7] border-b border-[#e0e0e0] py-6 px-4 sm:px-8">
-        <div className="max-w-[1240px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="flex items-start gap-3.5 p-3.5 rounded-xl bg-white border border-[#e0e0e0]">
-            <div className="w-9 h-9 rounded-full bg-[#0066cc]/10 text-[#0066cc] flex items-center justify-center shrink-0">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="text-[14px] font-semibold text-[#1d1d1f]">Inspect Before Paying</h3>
-              <p className="text-[12px] text-[#7a7a7a] mt-0.5">Unbox and test your device with the courier before paying cash.</p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-3.5 p-3.5 rounded-xl bg-white border border-[#e0e0e0]">
-            <div className="w-9 h-9 rounded-full bg-[#0066cc]/10 text-[#0066cc] flex items-center justify-center shrink-0">
-              <Award className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="text-[14px] font-semibold text-[#1d1d1f]">1-Year Egyptian Warranty</h3>
-              <p className="text-[12px] text-[#7a7a7a] mt-0.5">Comprehensive local coverage & immediate exchange on factory defects.</p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-3.5 p-3.5 rounded-xl bg-white border border-[#e0e0e0]">
-            <div className="w-9 h-9 rounded-full bg-[#0066cc]/10 text-[#0066cc] flex items-center justify-center shrink-0">
-              <RefreshCw className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="text-[14px] font-semibold text-[#1d1d1f]">Instant Trade-In Credit</h3>
-              <p className="text-[12px] text-[#7a7a7a] mt-0.5">Trade your existing phone or laptop for immediate store discount.</p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-3.5 p-3.5 rounded-xl bg-white border border-[#e0e0e0]">
-            <div className="w-9 h-9 rounded-full bg-[#0066cc]/10 text-[#0066cc] flex items-center justify-center shrink-0">
-              <Truck className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="text-[14px] font-semibold text-[#1d1d1f]">24h Express Delivery</h3>
-              <p className="text-[12px] text-[#7a7a7a] mt-0.5">Rapid dispatch across Cairo, Giza, Alexandria & all governorates.</p>
             </div>
           </div>
         </div>
