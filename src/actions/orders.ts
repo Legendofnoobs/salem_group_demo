@@ -138,3 +138,34 @@ export async function updateOrderStatus(orderId: string, status: OrderStatus) {
     return { success: false, error: error.message };
   }
 }
+
+export async function getOrderByNumber(orderNumber: string): Promise<OrderType | null> {
+  try {
+    const cleanNumber = orderNumber.trim().toUpperCase();
+    const order = await prisma.order.findUnique({
+      where: { orderNumber: cleanNumber },
+    });
+    return order as unknown as OrderType;
+  } catch (error) {
+    console.error(`Error retrieving order by number ${orderNumber}:`, error);
+    return null;
+  }
+}
+
+export async function getCustomerOrders(phone?: string): Promise<OrderType[]> {
+  try {
+    const where: any = {};
+    if (phone && phone.trim()) {
+      where.customerPhone = { contains: phone.trim() };
+    }
+    const orders = await prisma.order.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      take: 20,
+    });
+    return orders as unknown as OrderType[];
+  } catch (error) {
+    console.error('Error retrieving customer orders:', error);
+    return [];
+  }
+}

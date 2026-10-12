@@ -43,6 +43,7 @@ export interface ProductType {
 export interface CartItemType {
   productId: string;
   variantId?: string;
+  slug?: string;
   title: string;
   category: string;
   selectedColor?: string;
