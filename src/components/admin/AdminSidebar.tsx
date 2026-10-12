@@ -86,15 +86,15 @@ export function AdminSidebar({
       <div className="p-6 border-b border-[#f0f0f0]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <span className="w-9 h-9 rounded-xl bg-[#1d1d1f] text-white flex items-center justify-center text-[18px] font-semibold">
-              
+            <span className="w-9 h-9 rounded-xl bg-[#1d1d1f] text-white flex items-center justify-center font-bold text-[14px] shadow-xs">
+              SG
             </span>
             <div>
-              <h1 className="text-[15px] font-semibold text-[#1d1d1f] leading-tight tracking-[-0.2px]">
+              <h1 className="text-[15px] font-bold text-[#1d1d1f] leading-tight tracking-[-0.2px]">
                 {storeName}
               </h1>
               <p className="text-[12px] text-[#86868b] leading-tight">
-                Merchant Admin Portal
+                Operations Center
               </p>
             </div>
           </div>
